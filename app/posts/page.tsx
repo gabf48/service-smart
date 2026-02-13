@@ -26,7 +26,16 @@ export default function Posts() {
       {posts.map((post) => (
         <div key={post.id} className="border p-4 mb-4">
           <h2 className="text-xl font-bold">{post.title}</h2>
+
           <p>{post.content}</p>
+
+          {post.image_url && (
+            <img
+              src={post.image_url}
+              className="mt-2 rounded max-h-64"
+            />
+          )}
+
           <small>
             {new Date(post.created_at).toLocaleString()}
           </small>
