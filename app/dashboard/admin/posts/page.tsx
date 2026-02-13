@@ -1,14 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+
 
 export default function AdminPosts() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [posts, setPosts] = useState<any[]>([]);
 
 
+useEffect(() => {
+  const fetch = async () => {
+    const { data } = await supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    setPosts(data || []);
+  };
+
+  fetch();
+}, []);
+
+const deletePost = async (id: string) => {
+  const { error } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", id);
+
+  if (!error) {
+    setPosts(posts.filter(p => p.id !== id));
+  }
+};
+
+
+  
   const handleAdd = async () => {
   if (!title || !content) {
     alert("Completează toate câmpurile!");
@@ -34,6 +62,8 @@ export default function AdminPosts() {
       .getPublicUrl(fileName).data.publicUrl;
   }
 
+  
+
   const { error } = await supabase.from("posts").insert([
     { title, content, image_url: imageUrl },
   ]);
@@ -45,7 +75,18 @@ export default function AdminPosts() {
     setContent("");
     setImage(null);
   }
+
+  const { data } = await supabase
+  .from("posts")
+  .select("*")
+  .order("created_at", { ascending: false });
+
+setPosts(data || []);
+
+  
 };
+
+
 
 
   return (
@@ -78,6 +119,29 @@ export default function AdminPosts() {
       >
         Publică
       </button>
+
+      <hr className="my-6" />
+
+<h2 className="text-xl font-bold">Postări existente</h2>
+
+{posts.map(post => (
+  <div key={post.id} className="border p-4 mt-4">
+    <h3 className="font-bold">{post.title}</h3>
+    <p>{post.content}</p>
+
+    {post.image_url && (
+      <img src={post.image_url} className="max-h-40 mt-2" />
+    )}
+
+    <button
+      onClick={() => deletePost(post.id)}
+      className="bg-red-600 text-white px-3 py-1 mt-2 rounded"
+    >
+      Șterge
+    </button>
+  </div>
+))}
+
     </div>
   );
 }
