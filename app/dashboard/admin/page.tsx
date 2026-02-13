@@ -2,9 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function AdminDashboard() {
+  return (
+    <ProtectedRoute role="admin">
+      <DashboardContent />
+    </ProtectedRoute>
+  );
+}
+
+function DashboardContent() {
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
@@ -20,9 +28,9 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-<div className="p-8 bg-gray-100 min-h-screen">
-  <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-  <table className="w-full border-collapse border border-gray-300 bg-white">
+    <div className="min-h-screen bg-slate-100 text-slate-900 p-8">
+      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+      <table className="w-full border-collapse border border-gray-300 bg-white">
         <thead>
           <tr>
             <th className="border p-2">Email</th>

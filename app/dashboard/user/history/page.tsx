@@ -3,15 +3,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export default function UserHistory() {
+export default function UserHistoryPage() {
   const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchHistory = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       const { data, error } = await supabase
@@ -28,7 +25,7 @@ export default function UserHistory() {
   }, []);
 
   return (
-    <div className="p-8">
+    <div>
       <h1 className="text-2xl font-bold mb-4">Istoric activități</h1>
       {history.length === 0 && <p>Nu ai înregistrări încă.</p>}
       <ul className="list-disc pl-5">
