@@ -9,22 +9,29 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+const handleLogin = async () => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-    if (error) {
-      alert(error.message);
-      return;
-    }
+  if (error) {
+    alert(error.message);
+    return;
+  }
 
-    // După login verificăm rolul (poți folosi custom claims sau tabel separat)
-    // Pentru moment, redirecționăm toți la dashboard/user
-    alert("Login reușit!");
+  // Obținem user-ul curent complet
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const role = user?.user_metadata?.role || "user";
+
+  if (role === "admin") {
+    router.push("/dashboard/admin");
+  } else {
     router.push("/dashboard/user");
-  };
+  }
+};
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-4">
