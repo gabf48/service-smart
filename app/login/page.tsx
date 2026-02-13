@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,10 +17,13 @@ export default function LoginPage() {
 
     if (error) {
       alert(error.message);
-    } else {
-      alert("Login reușit!");
-      console.log(data);
+      return;
     }
+
+    // După login verificăm rolul (poți folosi custom claims sau tabel separat)
+    // Pentru moment, redirecționăm toți la dashboard/user
+    alert("Login reușit!");
+    router.push("/dashboard/user");
   };
 
   return (
