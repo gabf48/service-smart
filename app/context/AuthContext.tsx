@@ -6,28 +6,33 @@ import { supabase } from "@/lib/supabase";
 type AuthContextType = {
   user: any;
   role: string | null;
-  logout: () => void;
+  loading: boolean;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   role: null,
-  logout: () => {},
+  loading: true,
+  logout: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [role, setRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const session = supabase.auth.getSession().then(({ data }) => {
+    // Verificăm sesiunea la mount
+    supabase.auth.getSession().then(({ data }) => {
       if (data.session?.user) {
         setUser(data.session.user);
-        // Extragem rolul din user_metadata
         setRole(data.session.user.user_metadata?.role || "user");
       }
+      setLoading(false); // după ce verificăm sesiunea, loading = false
     });
 
+    // Listener pentru schimbări de autentificare
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setUser(session.user);
@@ -36,6 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(null);
         setRole(null);
       }
+      setLoading(false);
     });
 
     return () => {
@@ -47,10 +53,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await supabase.auth.signOut();
     setUser(null);
     setRole(null);
+    setLoading(false);
+    // redirect la home
+    window.location.href = "/";
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, logout }}>
+    <AuthContext.Provider value={{ user, role, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

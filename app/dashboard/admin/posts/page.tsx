@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 
 export default function AdminPosts() {
@@ -90,6 +91,7 @@ setPosts(data || []);
 
 
   return (
+     <ProtectedRoute role="admin">
  <div className="p-8 flex flex-col gap-4 max-w-xl mx-auto bg-black rounded-xl shadow-lg">
 
       <h1 className="text-2xl font-bold">Adaugă lucrare</h1>
@@ -144,5 +146,6 @@ setPosts(data || []);
 ))}
 
     </div>
+     </ProtectedRoute>
   );
 }

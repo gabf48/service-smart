@@ -1,27 +1,35 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 
-type ProtectedRouteProps = {
-  children: ReactNode;
-  role: "user" | "admin";
-};
-
-export default function ProtectedRoute({ children, role }: ProtectedRouteProps) {
-  const { user, role: userRole } = useAuth();
+export default function ProtectedRoute({
+  children,
+  role,
+}: {
+  children: React.ReactNode;
+  role?: "admin" | "user";
+}) {
+  const { user, role: userRole, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!user || userRole !== role) {
-      router.replace("/"); // redirecționare pe home page
-    }
-  }, [user, userRole, router, role]);
+    if (loading) return;
 
-  if (!user || userRole !== role) {
-    return null;
-  }
+    // ❌ nu e logat → login
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+
+    // ❌ rol greșit → home
+    if (role && userRole !== role) {
+      router.replace("/");
+    }
+  }, [user, userRole, loading, router, role]);
+
+  if (loading) return null;
 
   return <>{children}</>;
 }

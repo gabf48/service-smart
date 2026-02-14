@@ -11,37 +11,50 @@ export default function Header() {
       <h1 className="font-bold text-lg">Service Smart</h1>
 
       <nav className="flex gap-4 items-center">
-        <Link href="/">Home</Link>
+        {/* Email logat */}
+        {user && <span className="text-sm text-gray-300">{user.email}</span>}
+
+        {/* Link-uri universale */}
+        <Link href="/home">Acasa</Link>
+        <Link href="/servicii">Servicii</Link>
+        <Link href="/contact">Contact</Link>
+        <Link href="/posts">Posts</Link>
+        <Link href="/reviews">Reviews</Link>
 
         {/* Guest */}
         {!user && (
           <>
-            <Link href="/login">Login</Link>
-            <Link href="/register">Register</Link>
+            <Link href="/login">Authentificare</Link>
+            <Link href="/register">Cont nou</Link>
           </>
         )}
 
-        {/* User */}
+        {/* User/Admin logat */}
         {user && role === "user" && (
-          <>
-            <Link href="/dashboard/user">Dashboard</Link>
-            <Link href="/dashboard/user/history">History</Link>
-            <span className="ml-2 text-sm text-gray-300">{user.email}</span>
-            <button onClick={logout} className="ml-2 bg-red-600 px-2 py-1 rounded text-white">
-              Logout
-            </button>
-          </>
+          <Link
+            href="/dashboard/user"
+            className="ml-2 bg-blue-600 px-3 py-1 rounded text-white"
+          >
+            User Dashboard
+          </Link>
         )}
 
-        {/* Admin */}
         {user && role === "admin" && (
-          <>
-            <Link href="/dashboard/admin">Dashboard Admin</Link>
-            <span className="ml-2 text-sm text-gray-300">{user.email}</span>
-            <button onClick={logout} className="ml-2 bg-red-600 px-2 py-1 rounded text-white">
-              Logout
-            </button>
-          </>
+          <Link
+            href="/dashboard/admin"
+            className="ml-2 bg-green-600 px-3 py-1 rounded text-white"
+          >
+            Admin Dashboard
+          </Link>
+        )}
+
+        {user && (
+          <button
+            onClick={logout}
+            className="ml-2 bg-red-600 px-2 py-1 rounded text-white"
+          >
+            Logout
+          </button>
         )}
       </nav>
     </header>

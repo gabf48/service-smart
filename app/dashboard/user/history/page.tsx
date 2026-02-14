@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import ProtectedRoute from "@/components/ProtectedRoute";
+
 
 export default function UserHistoryPage() {
   const [history, setHistory] = useState<any[]>([]);
@@ -25,6 +27,7 @@ export default function UserHistoryPage() {
   }, []);
 
   return (
+     <ProtectedRoute role="user">
     <div>
       <h1 className="text-2xl font-bold mb-4">Istoric activități</h1>
       {history.length === 0 && <p>Nu ai înregistrări încă.</p>}
@@ -36,5 +39,6 @@ export default function UserHistoryPage() {
         ))}
       </ul>
     </div>
+      </ProtectedRoute>
   );
 }
