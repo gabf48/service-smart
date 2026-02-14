@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
-
 export default function UserHistoryPage() {
   const [history, setHistory] = useState<any[]>([]);
 
@@ -27,18 +26,19 @@ export default function UserHistoryPage() {
   }, []);
 
   return (
-     <ProtectedRoute role="user">
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Istoric activități</h1>
-      {history.length === 0 && <p>Nu ai înregistrări încă.</p>}
-      <ul className="list-disc pl-5">
-        {history.map((item) => (
-          <li key={item.id}>
-            {new Date(item.created_at).toLocaleString()}: {item.description}
-          </li>
-        ))}
-      </ul>
-    </div>
-      </ProtectedRoute>
+    <ProtectedRoute role="user">
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-4">Istoric activități</h1>
+        {history.length === 0 ? <p>Nu ai înregistrări încă.</p> : (
+          <ul className="list-disc pl-5">
+            {history.map(item => (
+              <li key={item.id}>
+                {new Date(item.created_at).toLocaleString()}: {item.description}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </ProtectedRoute>
   );
 }
