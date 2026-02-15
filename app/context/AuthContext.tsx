@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setRole(null);
     setLoading(false);
     // redirect la home
-    window.location.href = "/";
+    window.location.href = "/home";
   };
 
   return (
