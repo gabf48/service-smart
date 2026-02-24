@@ -1,8 +1,12 @@
 'use client';
-export const dynamic = "force-dynamic";
 
-import ContactForm from './ContactForm';
+import { Suspense } from 'react';
+import ContactFormInner from './ContactFormInner';
 
-export default function ContactPage() {
-  return <ContactForm />;
+export default function ContactForm() {
+  return (
+    <Suspense fallback={<div>Loading form...</div>}>
+      <ContactFormInner />
+    </Suspense>
+  );
 }
