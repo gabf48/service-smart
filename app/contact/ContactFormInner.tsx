@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/app/context/AuthContext';
@@ -6,8 +7,8 @@ import { useSearchParams } from 'next/navigation';
 
 export default function ContactFormInner() {
   const { user } = useAuth();
-  const searchParams = useSearchParams(); // ⚡ aici trebuie să fie în Suspense
-  const motivoParam = searchParams.get('motivo') || '';
+  const searchParams = useSearchParams(); // ⚡ trebuie să fie doar client-side
+  const motivoParam = searchParams?.get('motivo') || '';
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -54,7 +55,68 @@ export default function ContactFormInner() {
 
   return (
     <div className="max-w-xl mx-auto p-8 bg-black/70 rounded-xl text-white flex flex-col gap-4">
-      {/* restul form-ului */}
+      <h1 className="text-2xl font-bold">Contact</h1>
+
+      <input
+        placeholder="Nume"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="p-2 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-blue-500"
+      />
+
+      <input
+        type="email"
+        placeholder="Email"
+        value={user?.email || email}
+        onChange={(e) => setEmail(e.target.value)}
+        disabled={!!user}
+        className={`p-2 border rounded focus:outline-none focus:border-blue-500 ${
+          user ? 'bg-gray-700 text-gray-300 cursor-not-allowed' : 'bg-gray-900 text-white'
+        }`}
+      />
+
+      <select
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        className="p-2 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-blue-500"
+      >
+        <option>Cerere oferta</option>
+        <option>Bug website</option>
+        <option>Colaborare</option>
+        <option>Problema laptop/PC</option>
+        <option>Alt motiv</option>
+        <option>Modifica date personale</option>
+      </select>
+
+      <textarea
+        placeholder="Descriere"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="p-2 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-blue-500"
+      />
+
+      <input
+        placeholder="Telefon"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        className="p-2 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-blue-500"
+      />
+
+      <input
+        type="file"
+        multiple
+        accept="image/*,video/*"
+        onChange={(e) => setFiles(e.target.files)}
+        className="p-2 bg-gray-900 text-white border border-gray-700 rounded focus:outline-none focus:border-blue-500"
+      />
+
+      <button
+        onClick={handleSubmit}
+        disabled={loading}
+        className="bg-blue-600 p-2 rounded mt-2"
+      >
+        {loading ? 'Se trimite...' : 'Trimite'}
+      </button>
     </div>
   );
 }
