@@ -46,14 +46,9 @@ body {
 .space-bg {
   background: url("/space.gif") no-repeat center center fixed;
   background-size: cover;
-  min-height: 100vh;
-  background-color: #000; /* fallback dacă gif nu e încărcat */
-}
-
-.space-bg {
-  background: url("/space.gif") no-repeat center center fixed;
-  background-size: cover;
-  min-height: 100vh;
+  height: 100dvh;        /* în loc de min-height */
+  overflow: hidden;      /* blochează scroll la nivel de body */
+  background-color: #000;
 }
 
 /* Firefox */
