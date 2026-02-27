@@ -7,7 +7,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ro">
       <body className="space-bg min-h-screen flex flex-col">
-        <AuthProvider>
+          <AuthProvider>
           <Header />
           
           {/* main content */}
