@@ -10,7 +10,22 @@ export default function Footer() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
 
-  const latestVersion = versions[0]?.version || "0.0.0";
+ const sortedVersions = [...versions].sort((a, b) => {
+  const da = new Date(a.date).getTime();
+  const db = new Date(b.date).getTime();
+  if (da !== db) return db - da; // date desc
+
+  // fallback: compare semver-ish "1.2.3"
+  const pa = a.version.split(".").map((n) => Number(n) || 0);
+  const pb = b.version.split(".").map((n) => Number(n) || 0);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const diff = (pb[i] ?? 0) - (pa[i] ?? 0);
+    if (diff !== 0) return diff;
+  }
+  return 0;
+});
+
+const latestVersion = sortedVersions[0]?.version || "0.0.0";
 
   // Close expanded panel when clicking/tapping outside (mobile-friendly)
   useEffect(() => {
@@ -176,7 +191,7 @@ export default function Footer() {
                 </tr>
               </thead>
               <tbody>
-                {versions.map((v, i) => (
+                {sortedVersions.map((v, i) => (
                   <tr key={i} className="hover:bg-gray-700">
                     <td className="border-b border-gray-700 p-2">{v.date}</td>
                     <td className="border-b border-gray-700 p-2">{v.version}</td>
