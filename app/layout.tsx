@@ -1,7 +1,19 @@
 import "./globals.css";
 import Header from "@/components/Header";
-import Footer from '@/components/Footer';
+import Footer from "@/components/Footer";
 import { AuthProvider } from "@/app/context/AuthContext";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Service Smart",
+    template: "%s | Service Smart",
+  },
+  description: "Service Smart",
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,11 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="space-bg min-h-screen flex flex-col">
           <AuthProvider>
           <Header />
-          
-          {/* main content */}
           <main className="flex-1">{children}</main>
-
-          {/* footer fix */}
           <Footer />
         </AuthProvider>
       </body>
