@@ -7,6 +7,48 @@ import { useAuth } from "@/app/context/AuthContext";
 
 type NavItem = { label: string; href: string };
 
+const PHONE_DISPLAY = "+40 746 263 481";
+const PHONE_TEL = "+40746263481";
+
+function PhoneBadge() {
+  return (
+    <a
+      href={`tel:${PHONE_TEL}`}
+      className={[
+        "group flex items-center gap-3",
+        "rounded-full bg-white/10 backdrop-blur-xl border border-white/15",
+        "px-4 py-2 shadow-lg",
+        "transition-all duration-300",
+        "hover:border-blue-500/40 hover:shadow-blue-500/25",
+        "whitespace-nowrap flex-nowrap shrink-0",
+      ].join(" ")}
+      aria-label={`Sună ${PHONE_DISPLAY}`}
+    >
+      {/* ping dot */}
+      <span className="relative flex h-3 w-3 shrink-0">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-70" />
+        <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500" />
+      </span>
+
+      {/* desktop number */}
+      <span className="hidden lg:inline text-sm font-semibold text-white group-hover:text-blue-300 transition whitespace-nowrap tabular-nums">
+        {PHONE_DISPLAY}
+      </span>
+
+      {/* availability - only large screens */}
+      <span className="hidden xl:inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-white/80 ring-1 ring-white/10 whitespace-nowrap">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+        Disponibil&nbsp;acum
+      </span>
+
+      {/* mobile compact */}
+      <span className="lg:hidden text-sm font-semibold text-white">
+        Sună
+      </span>
+    </a>
+  );
+}
+
 export default function Header() {
   const { user, role, logout } = useAuth();
   const pathname = usePathname();
@@ -37,10 +79,11 @@ export default function Header() {
 
   const linkClass = (active: boolean) =>
     [
-      "relative rounded-full px-3 py-2 text-base",
+      "relative rounded-full px-3 py-2 text-sm",
       "transition-all duration-200",
       "hover:bg-white/10",
       active ? "text-white" : "text-white/80",
+      "whitespace-nowrap",
     ].join(" ");
 
   return (
@@ -52,20 +95,20 @@ export default function Header() {
         scrolled ? "shadow-lg" : "shadow-md",
       ].join(" ")}
     >
-      {/* top glow line */}
-     <div className="h-px w-full bg-linear-to-r from-transparent via-white/20 to-transparent" />
-
+      {/* top glow */}
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       <div
         className={[
-          "mx-auto max-w-6xl flex items-center justify-between",
+          "mx-auto max-w-6xl flex items-center justify-between gap-4",
           "transition-all duration-300",
           scrolled ? "py-3 px-4" : "py-5 px-4",
         ].join(" ")}
       >
+        {/* Logo */}
         <h1
           className={[
-            "font-bold tracking-wide",
+            "font-bold tracking-wide shrink-0",
             "transition-all duration-300",
             scrolled ? "text-base" : "text-lg",
           ].join(" ")}
@@ -73,89 +116,90 @@ export default function Header() {
           <Link href="/home">Service Smart</Link>
         </h1>
 
-        <nav className="flex items-center gap-4 sm:gap-4 flex-wrap justify-end">
-          {/* Email logat */}
-          {user && (
-            <span className="hidden sm:inline text-sm text-gray-300 mr-1">
-              {user.email}
-            </span>
-          )}
+        {/* Right side */}
+        <div className="flex items-center gap-4 ml-auto min-w-0">
+          <PhoneBadge />
 
-          {/* Link-uri universale */}
-          {navItems.map((item) => {
-            const active = isActive(item.href);
-            return (
-              <Link key={item.href} href={item.href} className={linkClass(active)}>
-                {active && (
-                  <span className="absolute inset-0 -z-10 rounded-full bg-white/15 ring-1 ring-white/20" />
-                )}
-                {item.label}
+          <nav
+            className={[
+              "flex items-center gap-2 sm:gap-3",
+              "flex-nowrap whitespace-nowrap",
+              "overflow-x-auto",
+              "max-w-[55vw] lg:max-w-none",
+              "[-ms-overflow-style:none] [scrollbar-width:none]",
+            ].join(" ")}
+          >
+            <style jsx>{`
+              nav::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
+
+    
+          
+            {/* Universal links */}
+            {navItems.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <Link key={item.href} href={item.href} className={linkClass(active)}>
+                  {active && (
+                    <span className="absolute inset-0 -z-10 rounded-full bg-white/15 ring-1 ring-white/20" />
+                  )}
+                  {item.label}
+                </Link>
+              );
+            })}
+
+            {/* Guest */}
+            {!user && (
+              <>
+                <Link href="/login" className={linkClass(isActive("/login"))}>
+                  {isActive("/login") && (
+                    <span className="absolute inset-0 -z-10 rounded-full bg-white/15 ring-1 ring-white/20" />
+                  )}
+                  Autentificare
+                </Link>
+
+                <Link href="/register" className={linkClass(isActive("/register"))}>
+                  {isActive("/register") && (
+                    <span className="absolute inset-0 -z-10 rounded-full bg-white/15 ring-1 ring-white/20" />
+                  )}
+                  Cont nou
+                </Link>
+              </>
+            )}
+
+            {/* User dashboard */}
+            {user && role === "user" && (
+              <Link
+                href="/dashboard/user"
+                className="rounded-full px-3 py-2 text-sm bg-blue-600/90 hover:bg-blue-600 transition shadow-sm whitespace-nowrap"
+              >
+                Dashboard
               </Link>
-            );
-          })}
+            )}
 
-          {/* Guest */}
-          {!user && (
-            <>
-              <Link href="/login" className={linkClass(isActive("/login"))}>
-                {isActive("/login") && (
-                  <span className="absolute inset-0 -z-10 rounded-full bg-white/15 ring-1 ring-white/20" />
-                )}
-                Authentificare
+            {/* Admin dashboard */}
+            {user && role === "admin" && (
+              <Link
+                href="/dashboard/admin"
+                className="rounded-full px-3 py-2 text-sm bg-green-600/90 hover:bg-green-600 transition shadow-sm whitespace-nowrap"
+              >
+                Admin
               </Link>
+            )}
 
-              <Link href="/register" className={linkClass(isActive("/register"))}>
-                {isActive("/register") && (
-                  <span className="absolute inset-0 -z-10 rounded-full bg-white/15 ring-1 ring-white/20" />
-                )}
-                Cont nou
-              </Link>
-            </>
-          )}
-
-          {/* Dashboard buttons */}
-          {user && role === "user" && (
-            <Link
-              href="/dashboard/user"
-              className={[
-                "ml-1 rounded-full px-3 py-2 text-sm",
-                "transition-all duration-200",
-                "bg-blue-600/90 hover:bg-blue-600",
-                "shadow-sm",
-              ].join(" ")}
-            >
-              User Dashboard
-            </Link>
-          )}
-
-          {user && role === "admin" && (
-            <Link
-              href="/dashboard/admin"
-              className={[
-                "ml-1 rounded-full px-3 py-2 text-sm",
-                "transition-all duration-200",
-                "bg-green-600/90 hover:bg-green-600",
-                "shadow-sm",
-              ].join(" ")}
-            >
-              Admin Dashboard
-            </Link>
-          )}
-
-          {user && (
-            <button
-              onClick={logout}
-              className={[
-                "ml-1 rounded-full px-3 py-2 text-sm",
-                "transition-all duration-200",
-                "bg-red-600/90 hover:bg-red-600",
-                "shadow-sm",
-              ].join(" ")}
-            >
-              Logout
-            </button>
-          )}
-        </nav>
+            {/* Logout */}
+            {user && (
+              <button
+                onClick={logout}
+                className="rounded-full px-3 py-2 text-sm bg-red-600/90 hover:bg-red-600 transition shadow-sm whitespace-nowrap"
+              >
+                Logout
+              </button>
+            )}
+          </nav>
+        </div>
       </div>
 
       {/* bottom hairline */}
