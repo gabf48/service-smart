@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { TERMS_VERSION } from "@/app/terms";
 import PasswordInput from "@/components/PasswordInput";
 import { mapSupabaseAuthErrorToRo } from "@/utils/authErrorsRo";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -16,6 +19,12 @@ export default function RegisterPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+  // refs (focus to first invalid field)
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const passWrapRef = useRef<HTMLDivElement | null>(null);
+  const pass2WrapRef = useRef<HTMLDivElement | null>(null);
+  const termsRef = useRef<HTMLInputElement | null>(null);
+
   // --- email helpers
   const emailTrim = email.trim();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,16 +33,18 @@ export default function RegisterPage() {
   // --- password requirements
   const req = useMemo(() => {
     const p = password || "";
-    const length8 = p.length >= 8;
-    const upper = /[A-Z]/.test(p);
-    const digit = /[0-9]/.test(p);
-    const special = /[^A-Za-z0-9]/.test(p);
-    return { length8, upper, digit, special };
+    return {
+      length8: p.length >= 8,
+      upper: /[A-Z]/.test(p),
+      digit: /[0-9]/.test(p),
+      special: /[^A-Za-z0-9]/.test(p),
+    };
   }, [password]);
 
   const strength = useMemo(() => {
     const p = password || "";
     if (!p) return { label: "", score: 0 };
+
     let score = 0;
     if (p.length >= 8) score++;
     if (/[A-Z]/.test(p)) score++;
@@ -55,15 +66,48 @@ export default function RegisterPage() {
       ? "bg-emerald-400"
       : "bg-emerald-500";
 
-  const canSubmit =
-    !!emailTrim &&
-    emailRegex.test(emailTrim) &&
-    !!password &&
-    !!password2 &&
-    password.length >= 6 &&
-    password === password2 &&
-    acceptTerms &&
-    !loading;
+  const pageBg =
+    "space-bg relative isolate min-h-dvh flex items-start justify-center p-6 pb-24";
+
+  const inputBase =
+    "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-white/40 focus:border-white/25 focus:ring-4 focus:ring-white/10 transition";
+
+  const errorBox =
+    "mt-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200";
+
+  const successBox =
+    "mt-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-100";
+
+  const reqItem = (ok: boolean, label: string) => (
+    <li className={`flex items-center gap-2 text-xs ${ok ? "text-emerald-200" : "text-white/55"}`}>
+      <span
+        className={`inline-flex h-4 w-4 items-center justify-center rounded-full border ${
+          ok ? "border-emerald-400/50 bg-emerald-500/20" : "border-white/15 bg-white/5"
+        }`}
+      >
+        {ok ? "✓" : ""}
+      </span>
+      <span>{label}</span>
+    </li>
+  );
+
+  const scrollAndFocus = (el?: HTMLElement | null) => {
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (typeof (el as any).focus === "function") (el as any).focus();
+  };
+
+  const focusFirstInvalid = () => {
+    if (!emailTrim || !emailRegex.test(emailTrim)) return scrollAndFocus(emailRef.current);
+    if (!password) return scrollAndFocus(passWrapRef.current);
+    if (!password2 || password !== password2) return scrollAndFocus(pass2WrapRef.current);
+    if (!acceptTerms) return scrollAndFocus(termsRef.current);
+  };
+
+  useEffect(() => {
+    if (errorMsg) focusFirstInvalid();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorMsg]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,34 +177,18 @@ export default function RegisterPage() {
       return;
     }
 
-    setSuccessMsg("Cont creat! Verifică email-ul pentru confirmare.");
+    setSuccessMsg(
+      "Cont creat! Ți-am trimis un email de confirmare. Deschide email-ul și apasă pe linkul de activare, apoi revino și autentifică-te."
+    );
+
+    // reset fields
+    setEmail("");
+    setPassword("");
+    setPassword2("");
+    setAcceptTerms(false);
+
     setLoading(false);
   };
-
-  const pageBg =
-    "space-bg h-dvh overflow-hidden flex items-center justify-center p-6";
-
-  const inputBase =
-    "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-white/40 focus:border-white/25 focus:ring-4 focus:ring-white/10 transition";
-
-  const errorBox =
-    "mt-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200";
-
-  const successBox =
-    "mt-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-100";
-
-  const reqItem = (ok: boolean, label: string) => (
-    <li className={`flex items-center gap-2 text-xs ${ok ? "text-emerald-200" : "text-white/55"}`}>
-      <span
-        className={`inline-flex h-4 w-4 items-center justify-center rounded-full border ${
-          ok ? "border-emerald-400/50 bg-emerald-500/20" : "border-white/15 bg-white/5"
-        }`}
-      >
-        {ok ? "✓" : ""}
-      </span>
-      <span>{label}</span>
-    </li>
-  );
 
   return (
     <div className={pageBg}>
@@ -169,17 +197,16 @@ export default function RegisterPage() {
           errorMsg ? "shake" : ""
         }`}
       >
-        <h1 className="text-3xl font-bold text-white">Register</h1>
+        <h1 className="text-3xl font-bold text-white">Cont nou</h1>
         <p className="mt-1 text-sm text-white/70">Creează un cont nou.</p>
 
         <form onSubmit={handleRegister} className="mt-6 flex flex-col gap-3">
           <label className="text-sm text-white/70">Email</label>
           <input
+            ref={emailRef}
             type="email"
             placeholder="Email"
-            className={`${inputBase} ${
-              emailInvalid ? "border-red-500/60 focus:ring-red-500/20" : ""
-            }`}
+            className={`${inputBase} ${emailInvalid ? "border-red-500/60 focus:ring-red-500/20" : ""}`}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
@@ -187,17 +214,18 @@ export default function RegisterPage() {
           />
 
           <label className="mt-2 text-sm text-white/70">Parolă</label>
-          <PasswordInput
-            value={password}
-            onChange={setPassword}
-            placeholder="Parolă"
-            className="w-full"
-            inputClassName={inputBase}
-            autoComplete="new-password"
-            disabled={loading}
-          />
+          <div ref={passWrapRef}>
+            <PasswordInput
+              value={password}
+              onChange={setPassword}
+              placeholder="Parolă"
+              className="w-full"
+              inputClassName={inputBase}
+              autoComplete="new-password"
+              disabled={loading}
+            />
+          </div>
 
-          {/* Strength + checklist (only when user starts typing) */}
           {password.length > 0 && (
             <div className="mt-1 rounded-xl border border-white/10 bg-white/5 p-3 transition-all">
               <div className="flex items-center justify-between text-xs text-white/70">
@@ -222,18 +250,21 @@ export default function RegisterPage() {
           )}
 
           <label className="mt-2 text-sm text-white/70">Confirmă parola</label>
-          <PasswordInput
-            value={password2}
-            onChange={setPassword2}
-            placeholder="Confirmă parola"
-            className="w-full"
-            inputClassName={inputBase}
-            autoComplete="new-password"
-            disabled={loading}
-          />
+          <div ref={pass2WrapRef}>
+            <PasswordInput
+              value={password2}
+              onChange={setPassword2}
+              placeholder="Confirmă parola"
+              className="w-full"
+              inputClassName={inputBase}
+              autoComplete="new-password"
+              disabled={loading}
+            />
+          </div>
 
           <label className="mt-3 flex items-start gap-3 text-sm text-white/80">
             <input
+              ref={termsRef}
               type="checkbox"
               className="mt-1 h-4 w-4 accent-white"
               checked={acceptTerms}
@@ -255,12 +286,24 @@ export default function RegisterPage() {
           </label>
 
           {errorMsg && <p className={errorBox}>{errorMsg}</p>}
-          {successMsg && <p className={successBox}>{successMsg}</p>}
+
+          {successMsg && (
+            <div className={successBox}>
+              <p>{successMsg}</p>
+              <button
+                type="button"
+                onClick={() => router.push("/login")}
+                className="mt-3 w-full rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15 transition"
+              >
+                Mergi la login
+              </button>
+            </div>
+          )}
 
           <button
             type="submit"
-            disabled={!canSubmit}
-            className="mt-4 w-full rounded-xl bg-green-600 px-4 py-3 font-semibold text-white disabled:opacity-60 disabled:cursor-not-allowed transition"
+            disabled={loading}
+            className="relative z-10 mt-4 w-full rounded-xl bg-green-600 px-4 py-3 font-semibold text-white disabled:opacity-60 transition hover:bg-green-500 active:scale-[0.99]"
           >
             {loading ? "Se încarcă..." : "Creează cont"}
           </button>
@@ -272,14 +315,8 @@ export default function RegisterPage() {
           animation: authIn 220ms ease-out both;
         }
         @keyframes authIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         .shake {
           animation: shake 260ms ease-in-out;

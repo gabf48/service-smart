@@ -31,24 +31,34 @@ html {
   scroll-behavior: smooth;
 }
 
-/* body: păstrează variabilele de text, dar fundalul rămâne controlat */
 body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-
-  /* Important: nu mai pune aici background alb dacă ai imagine pe .space-bg */
   background: transparent;
 
   -webkit-tap-highlight-color: transparent;
+
+  /* FIX: permite scroll */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* dacă folosești className="space-bg" pe body */
 .space-bg {
-  background: url("/space.gif") no-repeat center center fixed;
+  background: url("/space.gif") no-repeat center center;
+  background-attachment: fixed;
   background-size: cover;
-  height: 100dvh;        /* în loc de min-height */
-  overflow: hidden;      /* blochează scroll la nivel de body */
   background-color: #000;
+
+  min-height: 100dvh;
+  height: auto;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .space-bg {
+    background-attachment: scroll;
+  }
 }
 
 /* Firefox */
