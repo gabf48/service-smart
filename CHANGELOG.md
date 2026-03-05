@@ -26,3 +26,15 @@
 ### Fixed
 - Aliniere UI header
 - Probleme wrap telefon în navbar
+
+
+## [1.3.0] - 2026-03-05
+
+### Added
+- trimitere emails prin formularul de contact
+
+### Improved
+- hamburger menu pentru mobile devices
+
+### Fixed
+- sterge email dupa trimitere mesaj prin pagina de contact

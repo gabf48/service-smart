@@ -1,3 +1,4 @@
+// components/Header.tsx
 "use client";
 
 import Link from "next/link";
@@ -24,27 +25,21 @@ function PhoneBadge() {
       ].join(" ")}
       aria-label={`Sună ${PHONE_DISPLAY}`}
     >
-      {/* ping dot */}
       <span className="relative flex h-3 w-3 shrink-0">
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-70" />
         <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500" />
       </span>
 
-      {/* desktop number */}
       <span className="hidden lg:inline text-sm font-semibold text-white group-hover:text-blue-300 transition whitespace-nowrap tabular-nums">
         {PHONE_DISPLAY}
       </span>
 
-      {/* availability - only large screens */}
       <span className="hidden xl:inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-white/80 ring-1 ring-white/10 whitespace-nowrap">
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
         Disponibil&nbsp;acum
       </span>
 
-      {/* mobile compact */}
-      <span className="lg:hidden text-sm font-semibold text-white">
-        Sună
-      </span>
+      <span className="lg:hidden text-sm font-semibold text-white">Sună</span>
     </a>
   );
 }
@@ -52,7 +47,9 @@ function PhoneBadge() {
 export default function Header() {
   const { user, role, logout } = useAuth();
   const pathname = usePathname();
+
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const navItems: NavItem[] = useMemo(
     () => [
@@ -72,6 +69,20 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  // ESC closes mobile menu
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    if (mobileOpen) window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mobileOpen]);
+
   const isActive = (href: string) => {
     if (!pathname) return false;
     return pathname === href || (href !== "/" && pathname.startsWith(href));
@@ -86,6 +97,13 @@ export default function Header() {
       "whitespace-nowrap",
     ].join(" ");
 
+  const mobileItemClass = (active: boolean) =>
+    [
+      "w-full text-left rounded-xl px-4 py-3",
+      "transition",
+      active ? "bg-white/10 text-white ring-1 ring-white/15" : "text-white/85 hover:bg-white/5",
+    ].join(" ");
+
   return (
     <header
       className={[
@@ -95,17 +113,15 @@ export default function Header() {
         scrolled ? "shadow-lg" : "shadow-md",
       ].join(" ")}
     >
-      {/* top glow */}
       <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       <div
         className={[
-          "mx-auto max-w-6xl flex items-center justify-between gap-4",
+          "mx-auto max-w-6xl flex items-center justify-between gap-3",
           "transition-all duration-300",
           scrolled ? "py-3 px-4" : "py-5 px-4",
         ].join(" ")}
       >
-        {/* Logo */}
         <h1
           className={[
             "font-bold tracking-wide shrink-0",
@@ -116,28 +132,11 @@ export default function Header() {
           <Link href="/home">Service Smart</Link>
         </h1>
 
-        {/* Right side */}
-        <div className="flex items-center gap-4 ml-auto min-w-0">
+        <div className="flex items-center gap-3 ml-auto min-w-0">
           <PhoneBadge />
 
-          <nav
-            className={[
-              "flex items-center gap-2 sm:gap-3",
-              "flex-nowrap whitespace-nowrap",
-              "overflow-x-auto",
-              "max-w-[55vw] lg:max-w-none",
-              "[-ms-overflow-style:none] [scrollbar-width:none]",
-            ].join(" ")}
-          >
-            <style jsx>{`
-              nav::-webkit-scrollbar {
-                display: none;
-              }
-            `}</style>
-
-    
-          
-            {/* Universal links */}
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-2">
             {navItems.map((item) => {
               const active = isActive(item.href);
               return (
@@ -150,7 +149,6 @@ export default function Header() {
               );
             })}
 
-            {/* Guest */}
             {!user && (
               <>
                 <Link href="/login" className={linkClass(isActive("/login"))}>
@@ -169,7 +167,6 @@ export default function Header() {
               </>
             )}
 
-            {/* User dashboard */}
             {user && role === "user" && (
               <Link
                 href="/dashboard/user"
@@ -179,7 +176,6 @@ export default function Header() {
               </Link>
             )}
 
-            {/* Admin dashboard */}
             {user && role === "admin" && (
               <Link
                 href="/dashboard/admin"
@@ -189,7 +185,6 @@ export default function Header() {
               </Link>
             )}
 
-            {/* Logout */}
             {user && (
               <button
                 onClick={logout}
@@ -199,10 +194,125 @@ export default function Header() {
               </button>
             )}
           </nav>
+
+          {/* Mobile hamburger */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen((v) => !v)}
+            className={[
+              "lg:hidden shrink-0",
+              "rounded-xl bg-white/10 border border-white/15",
+              "px-3 py-2",
+              "hover:bg-white/15 transition",
+            ].join(" ")}
+            aria-label="Deschide meniul"
+            aria-expanded={mobileOpen}
+          >
+            {/* simple hamburger / X */}
+            <span className="block h-5 w-5 relative">
+              <span
+                className={[
+                  "absolute left-0 right-0 h-0.5 bg-white rounded",
+                  "transition-all duration-200",
+                  mobileOpen ? "top-2.5 rotate-45" : "top-1",
+                ].join(" ")}
+              />
+              <span
+                className={[
+                  "absolute left-0 right-0 top-2.5 h-0.5 bg-white rounded",
+                  "transition-all duration-200",
+                  mobileOpen ? "opacity-0" : "opacity-100",
+                ].join(" ")}
+              />
+              <span
+                className={[
+                  "absolute left-0 right-0 h-0.5 bg-white rounded",
+                  "transition-all duration-200",
+                  mobileOpen ? "top-2.5 -rotate-45" : "top-4",
+                ].join(" ")}
+              />
+            </span>
+          </button>
         </div>
       </div>
 
-      {/* bottom hairline */}
+      {/* Mobile menu panel */}
+      {mobileOpen && (
+        <div className="lg:hidden border-t border-white/10 bg-black/75 backdrop-blur-xl">
+          <div className="mx-auto max-w-6xl px-4 py-4">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+              <div className="grid grid-cols-1 gap-2">
+                {navItems.map((item) => {
+                  const active = isActive(item.href);
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={mobileItemClass(active)}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+
+                {!user && (
+                  <>
+                    <Link
+                      href="/login"
+                      className={mobileItemClass(isActive("/login"))}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      Autentificare
+                    </Link>
+                    <Link
+                      href="/register"
+                      className={mobileItemClass(isActive("/register"))}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      Cont nou
+                    </Link>
+                  </>
+                )}
+
+                {user && role === "user" && (
+                  <Link
+                    href="/dashboard/user"
+                    className="rounded-xl px-4 py-3 bg-blue-600/90 hover:bg-blue-600 transition font-semibold"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                )}
+
+                {user && role === "admin" && (
+                  <Link
+                    href="/dashboard/admin"
+                    className="rounded-xl px-4 py-3 bg-green-600/90 hover:bg-green-600 transition font-semibold"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Admin
+                  </Link>
+                )}
+
+                {user && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      logout();
+                    }}
+                    className="rounded-xl px-4 py-3 bg-red-600/90 hover:bg-red-600 transition font-semibold text-left"
+                  >
+                    Logout
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="h-px w-full bg-white/10" />
     </header>
   );
