@@ -27,7 +27,6 @@
 - Aliniere UI header
 - Probleme wrap telefon în navbar
 
-
 ## [1.3.0] - 2026-03-05
 
 ### Added

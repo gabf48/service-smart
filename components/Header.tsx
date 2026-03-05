@@ -122,6 +122,7 @@ export default function Header() {
           scrolled ? "py-3 px-4" : "py-5 px-4",
         ].join(" ")}
       >
+        {/* Logo */}
         <h1
           className={[
             "font-bold tracking-wide shrink-0",
