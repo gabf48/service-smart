@@ -5,9 +5,21 @@ import Sidebar from "@/components/Slidebar";
 
 export default function AdminDashboardLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex">
+    <div className="flex min-h-screen text-white">
       <Sidebar />
-      <main className="flex-1 p-6 bg-gray-100 min-h-screen">{children}</main>
+
+      <main className="relative flex-1 p-6 overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="/space.gif"
+            alt="Space background"
+            className="h-full w-full object-cover opacity-25"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/70 to-black" />
+        </div>
+
+        <div className="relative">{children}</div>
+      </main>
     </div>
   );
 }
