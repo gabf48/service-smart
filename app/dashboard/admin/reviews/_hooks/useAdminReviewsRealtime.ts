@@ -2,18 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import type { ReviewRow, ReviewsTab } from "../_types/reviews";
+import type { ReviewRow, ReviewsTab, Notice } from "../_types/reviews";
 import { useReviewNotifier } from "./useReviewNotifier";
 
 export function useAdminReviewsRealtime({
-  reviews,
   setReviews,
   setNotice,
   tab,
 }: {
-  reviews: ReviewRow[];
   setReviews: React.Dispatch<React.SetStateAction<ReviewRow[]>>;
-  setNotice: (notice: { type: "success" | "error"; text: string } | null) => void;
+  setNotice: React.Dispatch<React.SetStateAction<Notice>>;
   tab: ReviewsTab;
 }) {
   const [newPendingCount, setNewPendingCount] = useState(0);
@@ -29,24 +27,33 @@ export function useAdminReviewsRealtime({
       .channel("admin-reviews-realtime")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "reviews" },
+        {
+          event: "*",
+          schema: "public",
+          table: "reviews",
+        },
         async (payload) => {
-          const oldPendingCount = reviews.filter((r) => r.is_approved !== true).length;
+          console.log("[Realtime payload]", payload);
 
           const { data, error } = await supabase
             .from("reviews")
             .select("*")
             .order("created_at", { ascending: false });
 
-          if (error) return;
+          if (error) {
+            console.error("[Realtime fetch error]", error);
+            return;
+          }
 
           const nextReviews = (data ?? []) as ReviewRow[];
-          const nextPendingCount = nextReviews.filter((r) => r.is_approved !== true).length;
 
           if (initialLoadDoneRef.current) {
-            if (payload.eventType === "INSERT" && nextPendingCount > oldPendingCount) {
+            if (payload.eventType === "INSERT") {
               setNewPendingCount((prev) => prev + 1);
-              setNotice({ type: "success", text: "A sosit un review nou." });
+              setNotice({
+                type: "success",
+                text: "A sosit un review nou.",
+              });
               playNewReviewSound();
             }
           } else {
@@ -56,12 +63,14 @@ export function useAdminReviewsRealtime({
           setReviews(nextReviews);
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log("[Realtime status]", status);
+      });
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [reviews, setNotice, setReviews, playNewReviewSound]);
+  }, [setReviews, setNotice, playNewReviewSound]);
 
   return { newPendingCount };
 }

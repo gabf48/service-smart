@@ -12,11 +12,10 @@ export function useAdminReviews() {
   const filters = useAdminReviewsFilters(data.reviews);
 
   const realtime = useAdminReviewsRealtime({
-    reviews: data.reviews,
-    setReviews: data.setReviews,
-    setNotice: data.setNotice,
-    tab: filters.tab,
-  });
+  setReviews: data.setReviews,
+  setNotice: data.setNotice,
+  tab: filters.tab,
+});
 
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
