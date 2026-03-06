@@ -97,7 +97,7 @@ export function useAdminReviewsData() {
   };
 
   const bulkApprove = async (ids: string[]) => {
-    if (!ids.length) return;
+    if (!ids.length) return false;
 
     const previous = reviews;
     setReviews((prev) =>
@@ -120,7 +120,7 @@ export function useAdminReviewsData() {
   };
 
   const bulkMoveToPending = async (ids: string[]) => {
-    if (!ids.length) return;
+    if (!ids.length) return false;
 
     const previous = reviews;
     setReviews((prev) =>
@@ -138,12 +138,15 @@ export function useAdminReviewsData() {
       return false;
     }
 
-    setNotice({ type: "success", text: `${ids.length} review-uri mutate în pending.` });
+    setNotice({
+      type: "success",
+      text: `${ids.length} review-uri mutate în pending.`,
+    });
     return true;
   };
 
   const bulkDelete = async (ids: string[]) => {
-    if (!ids.length) return;
+    if (!ids.length) return false;
 
     const previous = reviews;
     setReviews((prev) => prev.filter((r) => !ids.includes(r.id)));

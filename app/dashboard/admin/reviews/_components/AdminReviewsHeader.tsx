@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReviewsTab } from "../_utils/reviews";
+import type { ReviewsTab } from "../_types/reviews";
 
 export function AdminReviewsHeader({
   tab,

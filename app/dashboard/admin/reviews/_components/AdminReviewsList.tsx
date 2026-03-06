@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReviewRow } from "../_utils/reviews";
+import type { ReviewRow, ReviewsTab } from "../_types/reviews";
 import { AdminReviewCard } from "./AdminReviewCard";
 
 export function AdminReviewsList({
@@ -16,7 +16,7 @@ export function AdminReviewsList({
 }: {
   loading: boolean;
   reviews: ReviewRow[];
-  tab: "pending" | "approved";
+  tab: ReviewsTab;
   busyId: string | null;
   selectedIds: string[];
   onToggleSelected: (id: string) => void;

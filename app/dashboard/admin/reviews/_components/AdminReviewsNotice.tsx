@@ -1,6 +1,6 @@
 "use client";
 
-import type { Notice } from "../_utils/reviews";
+import type { Notice } from "../_types/reviews";
 
 export function AdminReviewsNotice({
   notice,
