@@ -120,13 +120,11 @@ export default function AdminReviewsPage() {
           />
         </div>
 
-        <div data-testid="admin-reviews-pagination">
-          <AdminReviewsPagination
-            page={page}
-            setPage={setPage}
-            totalPages={totalPages}
-          />
-        </div>
+       <AdminReviewsPagination
+  page={page}
+  setPage={setPage}
+  totalPages={totalPages}
+/>
       </div>
 
       <ConfirmDeleteModal
