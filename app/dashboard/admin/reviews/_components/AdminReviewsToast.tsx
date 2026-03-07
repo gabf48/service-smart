@@ -1,6 +1,6 @@
 "use client";
 
-import type { Notice } from "../_types/reviews";
+type Notice = { type: "success" | "error"; text: string } | null;
 
 export function AdminReviewsToast({
   notice,
@@ -11,31 +11,27 @@ export function AdminReviewsToast({
 }) {
   if (!notice) return null;
 
-  const boxClass =
+  const style =
     notice.type === "success"
-      ? "border-emerald-500/30 bg-emerald-500/12 text-emerald-100"
-      : "border-red-500/30 bg-red-500/12 text-red-100";
+      ? "bg-emerald-600"
+      : "bg-red-600";
 
   return (
-    <div className="fixed right-4 top-4 z-[70] w-full max-w-sm">
-      <div className={`rounded-2xl border px-4 py-3 shadow-2xl backdrop-blur-md ${boxClass}`}>
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <div className="font-semibold">
-              {notice.type === "success" ? "OK" : "Eroare"}
-            </div>
-            <div className="mt-1 text-sm opacity-90">{notice.text}</div>
-          </div>
+    <div
+      className={`fixed bottom-6 right-6 px-4 py-3 rounded-xl text-white shadow-lg ${style}`}
+      data-testid="admin-reviews-toast"
+      role="alert"
+    >
+      <div className="flex items-center gap-4">
+        <span data-testid="admin-reviews-toast-text">{notice.text}</span>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="shrink-0 rounded-lg px-2 py-1 text-white/70 hover:text-white hover:bg-white/10 transition"
-            aria-label="Închide"
-          >
-            ✕
-          </button>
-        </div>
+        <button
+          onClick={onClose}
+          data-testid="admin-reviews-toast-close"
+          className="text-white/80 hover:text-white"
+        >
+          ✕
+        </button>
       </div>
     </div>
   );

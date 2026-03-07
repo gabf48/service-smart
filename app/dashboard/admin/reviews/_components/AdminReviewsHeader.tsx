@@ -11,67 +11,61 @@ export function AdminReviewsHeader({
   newPendingCount,
 }: {
   tab: ReviewsTab;
-  setTab: (tab: ReviewsTab) => void;
+  setTab: (t: ReviewsTab) => void;
   pendingCount: number;
   approvedCount: number;
   onRefresh: () => void;
   newPendingCount: number;
 }) {
   return (
-    <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+    <div
+      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+      data-testid="admin-reviews-header"
+    >
       <div>
-        <div className="text-xs text-white/60">Admin</div>
-        <h1 className="mt-1 text-3xl font-bold">Reviews</h1>
-        <p className="mt-2 text-white/70">
+        <h1 className="text-3xl font-bold text-white">Reviews</h1>
+        <p className="text-white/70 text-sm">
           Aprobă sau respinge review-urile înainte să apară public.
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-3">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-1">
-          <button
-            type="button"
-            onClick={() => setTab("pending")}
-            className={[
-              "rounded-xl px-4 py-2 text-sm font-semibold transition relative",
-              tab === "pending"
-                ? "bg-white/10 ring-1 ring-white/15"
-                : "hover:bg-white/5 text-white/80",
-            ].join(" ")}
-          >
-            Pending{" "}
-            <span className="ml-2 rounded-full bg-white/10 px-2 py-0.5 text-xs">
-              {pendingCount}
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => setTab("pending")}
+          data-testid="admin-reviews-tab-pending"
+          className={`rounded-xl px-4 py-2 text-sm font-semibold ${
+            tab === "pending"
+              ? "bg-amber-500 text-black"
+              : "bg-white/10 text-white hover:bg-white/15"
+          }`}
+        >
+          Pending {pendingCount}
+          {newPendingCount > 0 && (
+            <span className="ml-2 text-xs text-red-400">
+              +{newPendingCount}
             </span>
+          )}
+        </button>
 
-            {newPendingCount > 0 && tab !== "pending" && (
-              <span className="ml-2 rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white">
-                +{newPendingCount}
-              </span>
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setTab("approved")}
-            className={[
-              "rounded-xl px-4 py-2 text-sm font-semibold transition",
-              tab === "approved"
-                ? "bg-white/10 ring-1 ring-white/15"
-                : "hover:bg-white/5 text-white/80",
-            ].join(" ")}
-          >
-            Approved{" "}
-            <span className="ml-2 rounded-full bg-white/10 px-2 py-0.5 text-xs">
-              {approvedCount}
-            </span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setTab("approved")}
+          data-testid="admin-reviews-tab-approved"
+          className={`rounded-xl px-4 py-2 text-sm font-semibold ${
+            tab === "approved"
+              ? "bg-emerald-500 text-black"
+              : "bg-white/10 text-white hover:bg-white/15"
+          }`}
+        >
+          Approved {approvedCount}
+        </button>
 
         <button
           type="button"
           onClick={onRefresh}
-          className="rounded-xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15 transition"
+          data-testid="admin-reviews-refresh"
+          className="rounded-xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15"
         >
           Refresh
         </button>

@@ -46,21 +46,36 @@ export function ReviewModalForm({
   const showCommentError = !comment.trim();
 
   return (
-    <div className="p-6 sm:p-7 space-y-4">
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-        <div className="text-sm font-semibold">Rating (obligatoriu)</div>
-        <div className="mt-2">
+    <div className="p-6 sm:p-7 space-y-4" data-testid="review-modal-form">
+      <div
+        className="rounded-2xl border border-white/10 bg-white/5 p-5"
+        data-testid="review-rating-section"
+      >
+        <div className="text-sm font-semibold" data-testid="review-rating-label">
+          Rating (obligatoriu)
+        </div>
+
+        <div className="mt-2" data-testid="review-rating-picker">
           <StarPicker value={rating} onChange={setRating} disabled={submitting} />
         </div>
       </div>
 
-      <div>
-        <div className="text-sm text-white/70 mb-1">Nume (obligatoriu)</div>
+      <div data-testid="review-name-section">
+        <label
+          htmlFor="review-name"
+          className="text-sm text-white/70 mb-1 block"
+        >
+          Nume (obligatoriu)
+        </label>
+
         <input
+          id="review-name"
+          name="review-name"
           value={isLogged ? computedLockedName : displayName}
           onChange={(e) => setDisplayName(e.target.value)}
           disabled={isLogged || submitting}
           placeholder="Numele tău"
+          data-testid="review-input-name"
           className={[
             "w-full p-3 rounded-xl border transition",
             "focus:outline-none focus:border-blue-500/60 focus:ring-4 focus:ring-blue-500/15",
@@ -71,15 +86,24 @@ export function ReviewModalForm({
         />
       </div>
 
-      <div>
-        <div className="text-sm text-white/70 mb-1">Review (obligatoriu)</div>
+      <div data-testid="review-comment-section">
+        <label
+          htmlFor="review-comment"
+          className="text-sm text-white/70 mb-1 block"
+        >
+          Review (obligatoriu)
+        </label>
 
         <textarea
+          id="review-comment"
+          name="review-comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           disabled={submitting}
           rows={5}
           maxLength={maxCommentChars}
+          aria-invalid={showCommentError}
+          data-testid="review-input-comment"
           placeholder={`Scrie pe scurt cum a fost experiența ta.
 • Ce ți-a plăcut?
 • Ce am putea îmbunătăți?
@@ -94,50 +118,68 @@ export function ReviewModalForm({
         />
 
         <div className="flex justify-between mt-1 text-xs">
-          <span className={showCommentError ? "text-red-400" : "text-white/50"}>
-            {showCommentError ? "Review-ul este obligatoriu." : "Scrie câteva cuvinte despre experiența ta."}
+          <span
+            className={showCommentError ? "text-red-400" : "text-white/50"}
+            data-testid="review-comment-helper"
+            aria-live="polite"
+          >
+            {showCommentError
+              ? "Review-ul este obligatoriu."
+              : "Scrie câteva cuvinte despre experiența ta."}
           </span>
 
-          <span className="text-white/55">
+          <span
+            className="text-white/55"
+            data-testid="review-comment-counter"
+          >
             {comment.length}/{maxCommentChars}
           </span>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+      <div
+        className="rounded-2xl border border-white/10 bg-white/5 p-5"
+        data-testid="review-files-section"
+      >
         <div className="text-sm font-semibold">Poze (opțional)</div>
-        <div className="text-xs text-white/60 mt-1">
+        <div className="text-xs text-white/60 mt-1" data-testid="review-files-meta">
           Maxim {MAX_FILES} imagini. Selectate: {pickedFiles.length}/{MAX_FILES}
         </div>
 
         <input
-          id="review_files"
+          id="review-files"
+          name="review-files"
           type="file"
           multiple
           accept="image/*"
           disabled={submitting || pickedFiles.length >= MAX_FILES}
           onChange={(e) => onPickFiles(e.target.files)}
+          data-testid="review-input-files"
           className="mt-3 w-full p-3 rounded-xl bg-gray-900/60 text-white border border-white/10 focus:outline-none focus:border-blue-500/60 focus:ring-4 focus:ring-blue-500/15 transition"
         />
 
         {previews.length > 0 && (
-          <div className="mt-4 grid grid-cols-3 gap-2">
+          <div className="mt-4 grid grid-cols-3 gap-2" data-testid="review-files-previews">
             {previews.map((src, idx) => (
               <div
                 key={src}
                 className="relative overflow-hidden rounded-xl border border-white/10 bg-black/30"
+                data-testid="review-preview-item"
               >
                 <img
                   src={src}
-                  alt="preview"
+                  alt={`preview-${idx + 1}`}
                   loading="lazy"
                   decoding="async"
                   className="h-24 w-full object-cover"
+                  data-testid="review-preview-image"
                 />
                 <button
                   type="button"
                   onClick={() => removePicked(idx)}
                   className="absolute top-2 right-2 rounded-lg bg-black/60 px-2 py-1 text-xs text-white hover:bg-black/80"
+                  data-testid="review-preview-remove"
+                  aria-label={`Șterge poza ${idx + 1}`}
                 >
                   ✕
                 </button>

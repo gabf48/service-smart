@@ -1,4 +1,3 @@
-// app/dashboard/admin/reviews/page.tsx
 "use client";
 
 import { AdminReviewsHeader } from "./_components/AdminReviewsHeader";
@@ -9,7 +8,6 @@ import { AdminReviewsToast } from "./_components/AdminReviewsToast";
 import { AdminReviewsToolbar } from "./_components/AdminReviewsToolbar";
 import { AdminReviewsPagination } from "./_components/AdminReviewsPagination";
 import { useAdminReviews } from "./_hooks/useAdminReviews";
-
 
 export default function AdminReviewsPage() {
   const {
@@ -54,8 +52,14 @@ export default function AdminReviewsPage() {
   } = useAdminReviews();
 
   return (
-    <div className="space-bg h-dvh overflow-hidden flex items-center justify-center p-6">
-      <div className="mx-auto max-w-6xl px-4 py-10 w-full">
+    <div
+      className="space-bg h-dvh overflow-hidden flex items-center justify-center p-6"
+      data-testid="admin-reviews-page"
+    >
+      <div
+        className="mx-auto max-w-6xl px-4 py-10 w-full"
+        data-testid="admin-reviews-container"
+      >
         <AdminReviewsHeader
           tab={tab}
           setTab={setTab}
@@ -65,12 +69,14 @@ export default function AdminReviewsPage() {
           newPendingCount={newPendingCount}
         />
 
-        <AdminReviewsStats
-          total={stats.total}
-          pending={stats.pending}
-          approved={stats.approved}
-          averageRating={stats.averageRating}
-        />
+        <div data-testid="admin-reviews-stats">
+          <AdminReviewsStats
+            total={stats.total}
+            pending={stats.pending}
+            approved={stats.approved}
+            averageRating={stats.averageRating}
+          />
+        </div>
 
         <AdminReviewsToolbar
           search={search}
@@ -100,7 +106,7 @@ export default function AdminReviewsPage() {
           canBulkMoveToPending={tab === "approved"}
         />
 
-        <div className="mt-8">
+        <div className="mt-8" data-testid="admin-reviews-list-section">
           <AdminReviewsList
             loading={loading}
             reviews={list}
@@ -114,11 +120,13 @@ export default function AdminReviewsPage() {
           />
         </div>
 
-        <AdminReviewsPagination
-          page={page}
-          setPage={setPage}
-          totalPages={totalPages}
-        />
+        <div data-testid="admin-reviews-pagination">
+          <AdminReviewsPagination
+            page={page}
+            setPage={setPage}
+            totalPages={totalPages}
+          />
+        </div>
       </div>
 
       <ConfirmDeleteModal

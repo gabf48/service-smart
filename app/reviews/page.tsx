@@ -22,9 +22,15 @@ export default function Page() {
 
   const form = useReviewForm(user);
 
-   useEffect(() => {
+  useEffect(() => {
     if (open) setModalNotice(null);
   }, [open]);
+
+  useEffect(() => {
+    if (errorMsg) {
+      setPageNotice({ type: "error", text: errorMsg });
+    }
+  }, [errorMsg]);
 
   const openModal = useCallback(() => {
     setModalNotice(null);
@@ -37,33 +43,29 @@ export default function Page() {
   }, []);
 
   const handleSubmit = useCallback(async () => {
-  setModalNotice(null); // ✅ curăță înainte de submit/validări
+    setModalNotice(null);
 
-  try {
-    await form.submitReview();
+    try {
+      await form.submitReview();
 
-    // dacă vrei să închizi imediat modalul, mesajul de succes NU are ce să rămână
-    setOpen(false);
-    form.reset();
-    fetchApproved();
+      setOpen(false);
+      form.reset();
+      fetchApproved();
 
-    // dacă vrei succes pe pagină:
-    setPageNotice({
-      type: "success",
-      text: "Mulțumim! Review-ul a fost trimis și va apărea după aprobarea adminului.",
-    });
-  } catch (e: any) {
-    setModalNotice({ type: "error", text: e?.message || "Eroare la trimiterea review-ului." });
-  }
-}, [form, fetchApproved]);
+      setPageNotice({
+        type: "success",
+        text: "Mulțumim! Review-ul a fost trimis și va apărea după aprobarea adminului.",
+      });
+    } catch (e: any) {
+      setModalNotice({
+        type: "error",
+        text: e?.message || "Eroare la trimiterea review-ului.",
+      });
+    }
+  }, [form, fetchApproved]);
 
-  // dacă vrei să afișezi errorMsg din useReviews în banner global:
-  // (opțional, dar util)
-  // React.useEffect(() => { if (errorMsg) setPageNotice({ type: "error", text: errorMsg }); }, [errorMsg]);
-
-  
   return (
-    <div className="space-bg min-h-dvh text-white">
+    <div className="space-bg min-h-dvh text-white" data-testid="reviews-page">
       <ReviewsHero
         avg={avg}
         count={count}
@@ -72,7 +74,13 @@ export default function Page() {
         onCloseNotice={() => setPageNotice(null)}
       />
 
-      <ReviewsList reviews={reviews} loading={loading} onRefresh={fetchApproved} />
+      <div data-testid="reviews-list-section">
+        <ReviewsList
+          reviews={reviews}
+          loading={loading}
+          onRefresh={fetchApproved}
+        />
+      </div>
 
       <ReviewModal
         open={open}

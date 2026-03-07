@@ -26,7 +26,11 @@ export function AdminReviewsList({
 }) {
   if (loading) {
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-white/70">
+      <div
+        className="rounded-2xl border border-white/10 bg-white/5 p-6 text-white/70"
+        data-testid="admin-reviews-loading"
+        aria-live="polite"
+      >
         Se încarcă…
       </div>
     );
@@ -34,9 +38,14 @@ export function AdminReviewsList({
 
   if (reviews.length === 0) {
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-10 text-center">
-        <div className="text-xl font-semibold">Nimic aici</div>
-        <div className="mt-2 text-sm text-white/70">
+      <div
+        className="rounded-2xl border border-white/10 bg-white/5 p-10 text-center"
+        data-testid="admin-reviews-empty"
+      >
+        <div className="text-xl font-semibold" data-testid="admin-reviews-empty-title">
+          Nimic aici
+        </div>
+        <div className="mt-2 text-sm text-white/70" data-testid="admin-reviews-empty-text">
           {tab === "pending"
             ? "Nu există review-uri în așteptare."
             : "Nu există review-uri aprobate încă."}
@@ -46,7 +55,10 @@ export function AdminReviewsList({
   }
 
   return (
-    <div className="grid grid-cols-1 gap-5">
+    <div
+      className="grid grid-cols-1 gap-5"
+      data-testid="admin-reviews-list"
+    >
       {reviews.map((review) => (
         <AdminReviewCard
           key={review.id}

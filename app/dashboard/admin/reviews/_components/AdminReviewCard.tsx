@@ -28,8 +28,14 @@ export function AdminReviewCard({
 
   return (
     <>
-      <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl shadow-black/30 overflow-hidden">
-        <div className="p-6">
+      <div
+        className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl shadow-black/30 overflow-hidden"
+        data-testid="admin-review-card"
+        data-review-id={review.id}
+        data-review-approved={review.is_approved === true ? "true" : "false"}
+        data-review-selected={selected ? "true" : "false"}
+      >
+        <div className="p-6" data-testid="admin-review-card-body">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <AdminReviewCardHeader
               review={review}
@@ -53,7 +59,10 @@ export function AdminReviewCard({
           />
         </div>
 
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div
+          className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"
+          data-testid="admin-review-card-divider"
+        />
       </div>
 
       <AttachmentPreviewModal

@@ -20,11 +20,15 @@ export function StarPicker({
   disabled?: boolean;
 }) {
   const v = Math.max(1, Math.min(5, value || 1));
-
   const label = useMemo(() => LABELS[v] ?? "", [v]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div
+      className="flex flex-col gap-2"
+      data-testid="review-star-picker"
+      role="radiogroup"
+      aria-label="Rating review"
+    >
       <div className="flex items-center gap-2">
         {Array.from({ length: 5 }).map((_, i) => {
           const star = i + 1;
@@ -33,28 +37,38 @@ export function StarPicker({
           return (
             <button
               key={star}
+              id={`review-star-${star}`}
               type="button"
               disabled={disabled}
               onClick={() => onChange(star)}
+              data-testid={`review-star-${star}`}
+              aria-label={`${star} stele - ${LABELS[star]}`}
+              aria-checked={v === star}
+              role="radio"
+              title={`${star} - ${LABELS[star]}`}
               className={[
                 "text-2xl leading-none transition select-none",
                 active ? "text-amber-300" : "text-white/25 hover:text-white/50",
                 disabled ? "opacity-60 cursor-not-allowed" : "",
               ].join(" ")}
-              aria-label={`${star} stele - ${LABELS[star]}`}
-              title={`${star} - ${LABELS[star]}`}
             >
               ★
             </button>
           );
         })}
 
-        <span className="text-sm text-white/70 ml-2">
+        <span
+          className="text-sm text-white/70 ml-2"
+          data-testid="review-rating-value"
+        >
           {v}/5 <span className="text-white/50">— {label}</span>
         </span>
       </div>
 
-      <div className="text-xs text-white/60">
+      <div
+        className="text-xs text-white/60"
+        data-testid="review-rating-legend"
+      >
         {Array.from({ length: 5 }).map((_, i) => {
           const star = i + 1;
           return (

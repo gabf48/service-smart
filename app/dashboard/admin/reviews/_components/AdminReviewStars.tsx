@@ -1,10 +1,14 @@
 "use client";
 
-export function AdminReviewStars({ rating }: { rating: number }) {
+export default function AdminReviewStars({
+  rating,
+}: {
+  rating: number;
+}) {
   const r = Math.max(0, Math.min(5, rating));
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1" data-testid="admin-review-stars">
       {Array.from({ length: 5 }).map((_, i) => (
         <span
           key={i}
@@ -14,7 +18,9 @@ export function AdminReviewStars({ rating }: { rating: number }) {
           ★
         </span>
       ))}
-      <span className="ml-2 text-sm text-white/70 tabular-nums">{r}/5</span>
+      <span className="ml-2 text-sm text-white/70 tabular-nums">
+        {r}/5
+      </span>
     </div>
   );
 }

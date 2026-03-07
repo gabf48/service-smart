@@ -20,15 +20,19 @@ export function AdminReviewsBulkActions({
   canBulkMoveToPending: boolean;
 }) {
   return (
-    <div className="flex flex-wrap gap-3 items-center">
+    <div
+      className="flex flex-wrap items-center gap-3"
+      data-testid="admin-reviews-bulk-actions"
+    >
       <span className="text-sm text-white/60">
-        Selectate: <span className="text-white font-semibold">{selectedCount}</span>
+        Selectate: {selectedCount}
       </span>
 
       <button
         type="button"
         onClick={onSelectAllVisible}
-        className="rounded-xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15 transition"
+        data-testid="admin-reviews-select-page"
+        className="rounded-xl bg-white/10 px-3 py-2 text-sm hover:bg-white/15"
       >
         Selectează pagina
       </button>
@@ -36,7 +40,8 @@ export function AdminReviewsBulkActions({
       <button
         type="button"
         onClick={onClearSelection}
-        className="rounded-xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15 transition"
+        data-testid="admin-reviews-clear-selection"
+        className="rounded-xl bg-white/10 px-3 py-2 text-sm hover:bg-white/15"
       >
         Clear
       </button>
@@ -45,8 +50,8 @@ export function AdminReviewsBulkActions({
         <button
           type="button"
           onClick={onBulkApprove}
-          disabled={!selectedCount}
-          className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold hover:bg-emerald-700 transition disabled:opacity-40"
+          data-testid="admin-reviews-bulk-approve"
+          className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold hover:bg-emerald-700"
         >
           Approve selected
         </button>
@@ -56,8 +61,8 @@ export function AdminReviewsBulkActions({
         <button
           type="button"
           onClick={onBulkMoveToPending}
-          disabled={!selectedCount}
-          className="rounded-xl bg-white/15 px-4 py-2 text-sm font-semibold hover:bg-white/20 transition disabled:opacity-40"
+          data-testid="admin-reviews-bulk-pending"
+          className="rounded-xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15"
         >
           Move selected to pending
         </button>
@@ -66,8 +71,8 @@ export function AdminReviewsBulkActions({
       <button
         type="button"
         onClick={onBulkDelete}
-        disabled={!selectedCount}
-        className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold hover:bg-red-700 transition disabled:opacity-40"
+        data-testid="admin-reviews-bulk-delete"
+        className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold hover:bg-red-700"
       >
         Delete selected
       </button>

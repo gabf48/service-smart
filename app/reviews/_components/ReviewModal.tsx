@@ -70,26 +70,40 @@ export function ReviewModal({
   maxCommentChars?: number;
 }) {
   if (!open) return null;
-const canSubmit =
+
+  const canSubmit =
     !!comment.trim() &&
     (isLogged ? !!computedLockedName.trim() : !!displayName.trim()) &&
     rating >= 1 &&
     rating <= 5;
+
   return (
     <div
       className="fixed inset-0 z-[80] overflow-y-auto"
       role="dialog"
       aria-modal="true"
+      aria-labelledby="review-modal-title"
+      data-testid="review-modal"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div className="min-h-dvh px-4 py-6 sm:py-10 flex items-start justify-center">
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+        <div
+          className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+          data-testid="review-modal-overlay"
+        />
 
-        <div className="relative w-full max-w-2xl">
+        <div
+          className="relative w-full max-w-2xl"
+          data-testid="review-modal-container"
+        >
           <div className="rounded-2xl border border-white/10 bg-gray-950/85 shadow-2xl max-h-[85vh] overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
-            <ReviewModalHeader onClose={onClose} notice={notice} onDismissNotice={onDismissNotice} />
+            <ReviewModalHeader
+              onClose={onClose}
+              notice={notice}
+              onDismissNotice={onDismissNotice}
+            />
 
             <ReviewModalForm
               submitting={submitting}
@@ -109,13 +123,13 @@ const canSubmit =
               removePicked={removePicked}
             />
 
-           <ReviewModalFooter
-  submitting={submitting}
-  uploadPct={uploadPct}
-  canSubmit={canSubmit}
-  onClose={onClose}
-  onSubmit={onSubmit}
-/>
+            <ReviewModalFooter
+              submitting={submitting}
+              uploadPct={uploadPct}
+              canSubmit={canSubmit}
+              onClose={onClose}
+              onSubmit={onSubmit}
+            />
           </div>
         </div>
 

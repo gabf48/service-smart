@@ -39,51 +39,82 @@ export function AdminReviewsToolbar({
   canBulkMoveToPending: boolean;
 }) {
   return (
-    <div className="mt-6 space-y-4">
+    <div className="mt-6 space-y-4" data-testid="admin-reviews-toolbar">
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <input
+            id="admin-reviews-search"
+            name="admin-reviews-search"
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Caută după nume, comentariu, email..."
+            data-testid="admin-reviews-search"
             className="w-full sm:w-80 rounded-xl bg-white/10 border border-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-blue-500/50"
           />
 
           <select
+            id="admin-reviews-rating-filter"
+            name="admin-reviews-rating-filter"
             value={ratingFilter}
             onChange={(e) =>
               setRatingFilter(e.target.value === "all" ? "all" : Number(e.target.value))
             }
+            data-testid="admin-reviews-rating-filter"
             className="rounded-xl bg-white/10 border border-white/10 px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500/50"
           >
-            <option value="all" className="bg-gray-900">Toate rating-urile</option>
-            <option value="5" className="bg-gray-900">5 stele</option>
-            <option value="4" className="bg-gray-900">4 stele</option>
-            <option value="3" className="bg-gray-900">3 stele</option>
-            <option value="2" className="bg-gray-900">2 stele</option>
-            <option value="1" className="bg-gray-900">1 stea</option>
+            <option value="all" className="bg-gray-900">
+              Toate rating-urile
+            </option>
+            <option value="5" className="bg-gray-900">
+              5 stele
+            </option>
+            <option value="4" className="bg-gray-900">
+              4 stele
+            </option>
+            <option value="3" className="bg-gray-900">
+              3 stele
+            </option>
+            <option value="2" className="bg-gray-900">
+              2 stele
+            </option>
+            <option value="1" className="bg-gray-900">
+              1 stea
+            </option>
           </select>
 
           <select
+            id="admin-reviews-sort"
+            name="admin-reviews-sort"
             value={sortMode}
             onChange={(e) => setSortMode(e.target.value as SortMode)}
+            data-testid="admin-reviews-sort"
             className="rounded-xl bg-white/10 border border-white/10 px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500/50"
           >
-            <option value="newest" className="bg-gray-900">Cele mai noi</option>
-            <option value="rating_desc" className="bg-gray-900">Rating mare</option>
-            <option value="rating_asc" className="bg-gray-900">Rating mic</option>
+            <option value="newest" className="bg-gray-900">
+              Cele mai noi
+            </option>
+            <option value="rating_desc" className="bg-gray-900">
+              Rating mare
+            </option>
+            <option value="rating_asc" className="bg-gray-900">
+              Rating mic
+            </option>
           </select>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 text-sm">
-          <span className="text-white/60">
+        <div
+          className="flex flex-wrap items-center gap-3 text-sm"
+          data-testid="admin-reviews-toolbar-meta"
+        >
+          <span className="text-white/60" data-testid="admin-reviews-results-count">
             Rezultate: <span className="text-white font-semibold">{totalFiltered}</span>
           </span>
 
           <button
             type="button"
             onClick={onExportCsv}
+            data-testid="admin-reviews-export-csv"
             className="rounded-xl bg-white/10 px-4 py-2 font-semibold hover:bg-white/15 transition"
           >
             Export CSV
