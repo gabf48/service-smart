@@ -1,0 +1,34 @@
+name: Promote Staging to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type PROMOTE to continue"
+        required: true
+        type: string
+
+jobs:
+  promote:
+    if: ${{ github.event.inputs.confirm == 'PROMOTE' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout staging
+        uses: actions/checkout@v4
+        with:
+          ref: stg
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Force main to staging
+        run: |
+          git fetch origin
+          git checkout -B main origin/stg
+          git push origin main --force
