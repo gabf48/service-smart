@@ -1,4 +1,4 @@
-import { test, expect } from "./admin.fixture";
+import { test, expect } from "./user.fixture";
 import path from "path";
 
 function uniqueText(prefix: string) {
@@ -16,15 +16,16 @@ test.describe("Logged user reviews", () => {
   });
 
   test("@smoke @user logged user sees locked name", async ({ page }) => {
-    await page.goto("/reviews");
+  await page.goto("/reviews");
 
-    await page.getByTestId("reviews-open-modal").click();
+  await page.getByTestId("reviews-open-modal").click();
 
-    const nameInput = page.getByTestId("review-input-name");
+  const nameInput = page.getByTestId("review-input-name");
 
-    await expect(nameInput).toBeVisible();
-    await expect(nameInput).toBeDisabled();
-  });
+  await expect(nameInput).toBeVisible();
+  await expect(nameInput).toBeDisabled();
+  await expect(nameInput).not.toHaveValue("");
+});
 
   test("@regression @user logged user sees submit disabled before valid comment", async ({ page }) => {
     await page.goto("/reviews");
@@ -98,4 +99,27 @@ test.describe("Logged user reviews", () => {
 
     await expect(page.getByTestId("reviews-page-notice")).toHaveCount(0);
   });
+
+test("@regression @user logged user can close review modal", async ({ page }) => {
+  await page.goto("/reviews");
+
+  await page.getByTestId("reviews-open-modal").click();
+  await expect(page.getByTestId("review-modal")).toBeVisible();
+
+  await page.getByTestId("review-modal-close").click();
+
+  await expect(page.getByTestId("review-modal")).toHaveCount(0);
+});
+
+test("@regression @user logged user can preview multiple images", async ({ page }) => {
+  const file1 = path.resolve("tests/fixtures/test-image-1.jpg");
+  const file2 = path.resolve("tests/fixtures/test-image-2.jpg");
+
+  await page.goto("/reviews");
+  await page.getByTestId("reviews-open-modal").click();
+
+  await page.getByTestId("review-input-files").setInputFiles([file1, file2]);
+
+  await expect(page.getByTestId("review-preview-item")).toHaveCount(2);
+});
 });

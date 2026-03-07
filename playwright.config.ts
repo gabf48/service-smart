@@ -36,15 +36,20 @@ export default defineConfig({
 
   projects: [
     {
-      name: "setup",
-      testMatch: /auth\.setup\.ts/,
+      name: "setup-admin",
+      testMatch: /.*auth\.setup\.ts/,
+    },
+    {
+      name: "setup-user",
+      testMatch: /.*user\.setup\.ts/,
     },
     {
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
       },
-      dependencies: ["setup"],
+      dependencies: ["setup-admin", "setup-user"],
+      testIgnore: [/.*auth\.setup\.ts/, /.*user\.setup\.ts/],
     },
   ],
 });
