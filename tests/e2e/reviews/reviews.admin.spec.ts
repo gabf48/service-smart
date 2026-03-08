@@ -1,5 +1,6 @@
 import { test, expect } from "./admin.fixture";
 import { createReviewViaUi } from "../utils/createReviewViaUi";
+import { cleanupPlaywrightReviews } from "../utils/testReviewCleanup";
 import path from "path";
 
 function uniqueText(prefix: string) {
@@ -13,6 +14,14 @@ test.describe("Admin reviews moderation", () => {
     await expect(page.getByTestId("admin-reviews-page")).toBeVisible();
     await expect(page.getByTestId("admin-reviews-header")).toBeVisible();
   });
+
+  test.beforeAll(async () => {
+  await cleanupPlaywrightReviews("PW");
+});
+
+test.afterAll(async () => {
+  await cleanupPlaywrightReviews("PW");
+});
 
   test("@regression @admin admin can switch tabs", async ({ page }) => {
     await page.goto("/dashboard/admin/reviews");

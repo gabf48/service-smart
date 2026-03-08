@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { cleanupPlaywrightReviews } from "../utils/testReviewCleanup";
 import path from "path";
 
 
@@ -15,6 +16,14 @@ test.describe("Guest reviews", () => {
     await expect(page.getByTestId("review-modal")).toBeVisible();
     await expect(page.getByTestId("review-modal-title")).toBeVisible();
   });
+
+test.beforeAll(async () => {
+  await cleanupPlaywrightReviews("PW");
+});
+
+test.afterAll(async () => {
+  await cleanupPlaywrightReviews("PW");
+});
 
   test("@smoke @guest guest sees validation for empty review", async ({ page }) => {
     await page.goto("/reviews");

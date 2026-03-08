@@ -1,4 +1,5 @@
 import { test, expect } from "./user.fixture";
+import { cleanupPlaywrightReviews } from "../utils/testReviewCleanup";
 import path from "path";
 
 function uniqueText(prefix: string) {
@@ -14,6 +15,14 @@ test.describe("Logged user reviews", () => {
     await expect(page.getByTestId("review-modal")).toBeVisible();
     await expect(page.getByTestId("review-modal-title")).toBeVisible();
   });
+
+  test.beforeAll(async () => {
+  await cleanupPlaywrightReviews("PW");
+});
+
+test.afterAll(async () => {
+  await cleanupPlaywrightReviews("PW");
+});
 
   test("@smoke @user logged user sees locked name", async ({ page }) => {
   await page.goto("/reviews");
