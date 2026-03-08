@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AppVersion from "@/components/AppVersion";
 import { AuthProvider } from "@/app/context/AuthContext";
 import type { Metadata } from "next";
 
@@ -15,11 +16,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="ro">
       <body className="space-bg min-h-screen flex flex-col">
-          <AuthProvider>
+        <AppVersion />
+        <AuthProvider>
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
