@@ -17,19 +17,19 @@ export default function ProtectedRoute({
   useEffect(() => {
     if (loading) return;
 
-    // ❌ nu e logat → login
     if (!user) {
       router.replace("/login");
       return;
     }
 
-    // ❌ rol greșit → home
     if (role && userRole !== role) {
       router.replace("/");
     }
   }, [user, userRole, loading, router, role]);
 
   if (loading) return null;
+  if (!user) return null;
+  if (role && userRole !== role) return null;
 
   return <>{children}</>;
 }

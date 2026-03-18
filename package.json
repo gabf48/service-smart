@@ -15,7 +15,9 @@
     "test:e2e:regression": "playwright test --grep @regression",
     "test:e2e:guest": "playwright test --grep @guest",
     "test:e2e:user": "playwright test --grep @user",
-    "test:e2e:admin": "playwright test --grep @admin"
+    "test:e2e:admin": "playwright test --grep @admin",
+    "build:versioned": "NEXT_PUBLIC_APP_VERSION=$(git rev-parse --short HEAD) NEXT_PUBLIC_GIT_SHA=$(git rev-parse HEAD) NEXT_PUBLIC_BUILD_DATE=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\") next build",
+"dev:versioned": "NEXT_PUBLIC_APP_VERSION=$(git rev-parse --short HEAD) NEXT_PUBLIC_GIT_SHA=$(git rev-parse HEAD) NEXT_PUBLIC_BUILD_DATE=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\") next dev"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.98.0",

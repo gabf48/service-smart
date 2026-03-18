@@ -1,9 +1,8 @@
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import AppVersion from "@/components/AppVersion";
 import { AuthProvider } from "@/app/context/AuthContext";
 import type { Metadata } from "next";
+import LayoutShell from "@/components/LayoutShell";
 
 export const metadata: Metadata = {
   title: {
@@ -26,9 +25,7 @@ export default function RootLayout({
       <body className="space-bg min-h-screen flex flex-col">
         <AppVersion />
         <AuthProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+         <LayoutShell>{children}</LayoutShell>
         </AuthProvider>
       </body>
     </html>

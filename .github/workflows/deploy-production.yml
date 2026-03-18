@@ -33,7 +33,7 @@ jobs:
             npm ci
 
             echo "==> Build app"
-            npm run build
+            npm run build:versioned
 
             echo "==> Restart PM2"
             pm2 restart ${{ secrets.PROD_PM2_APP_NAME }} --update-env

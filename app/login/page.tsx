@@ -86,8 +86,15 @@ export default function LoginPage() {
       window.localStorage.removeItem("pending_terms_acceptance");
     }
 
-    const role = user.user_metadata?.role || "user";
-    router.push(role === "admin" ? "/dashboard/admin" : "/dashboard/user");
+    const { data: profile } = await supabase
+  .from("profiles")
+  .select("role")
+  .eq("id", user.id)
+  .single();
+
+const role = profile?.role ?? "user";
+
+router.push(role === "admin" ? "/dashboard/admin" : "/dashboard/user");
   };
 
   return (
