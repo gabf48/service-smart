@@ -1,7 +1,19 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { supabase } from "@/lib/supabase";
+import {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  ReactNode,
+} from "react";
+
+import {
+  getUserRole,
+  getSessionUser,
+  onAuthChange,
+  signOut,
+} from "./authService";
 
 type RoleType = "admin" | "user" | null;
 
@@ -13,7 +25,7 @@ type AuthContextType = {
   refreshAuth: () => Promise<void>;
 };
 
-const AuthContext = createContext<AuthContextType>({
+export const AuthContext = createContext<AuthContextType>({
   user: null,
   role: null,
   loading: true,
@@ -21,97 +33,53 @@ const AuthContext = createContext<AuthContextType>({
   refreshAuth: async () => {},
 });
 
-async function getUserRole(userId: string): Promise<"admin" | "user"> {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", userId)
-    .single();
-
-  if (error || !data?.role) {
-    return "user";
-  }
-
-  return data.role === "admin" ? "admin" : "user";
-}
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [role, setRole] = useState<RoleType>(null);
   const [loading, setLoading] = useState(true);
 
-  const refreshAuth = async () => {
-    setLoading(true);
-
-    const { data } = await supabase.auth.getSession();
-    const sessionUser = data.session?.user ?? null;
-
+  const hydrate = async (sessionUser: any) => {
     if (sessionUser) {
-      const profileRole = await getUserRole(sessionUser.id);
+      const r = await getUserRole(sessionUser.id);
       setUser(sessionUser);
-      setRole(profileRole);
+      setRole(r);
     } else {
       setUser(null);
       setRole(null);
     }
-
     setLoading(false);
+  };
+
+  const refreshAuth = async () => {
+    setLoading(true);
+    const sessionUser = await getSessionUser();
+    await hydrate(sessionUser);
   };
 
   useEffect(() => {
     let mounted = true;
 
-    const hydrateAuth = async () => {
-      const { data } = await supabase.auth.getSession();
-      const sessionUser = data.session?.user ?? null;
-
+    const init = async () => {
+      const sessionUser = await getSessionUser();
       if (!mounted) return;
-
-      if (sessionUser) {
-        const profileRole = await getUserRole(sessionUser.id);
-
-        if (!mounted) return;
-
-        setUser(sessionUser);
-        setRole(profileRole);
-      } else {
-        setUser(null);
-        setRole(null);
-      }
-
-      if (mounted) setLoading(false);
+      await hydrate(sessionUser);
     };
 
-    hydrateAuth();
+    init();
 
-    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const sessionUser = session?.user ?? null;
-
-      if (sessionUser) {
-        const profileRole = await getUserRole(sessionUser.id);
-
-        if (!mounted) return;
-
-        setUser(sessionUser);
-        setRole(profileRole);
-      } else {
-        if (!mounted) return;
-
-        setUser(null);
-        setRole(null);
-      }
-
-      if (mounted) setLoading(false);
+    const unsubscribe = onAuthChange(async (sessionUser) => {
+      if (!mounted) return;
+      await hydrate(sessionUser);
     });
 
     return () => {
       mounted = false;
-      listener.subscription.unsubscribe();
+      unsubscribe();
     };
   }, []);
 
   const logout = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     setUser(null);
     setRole(null);
     setLoading(false);
@@ -119,7 +87,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, loading, logout, refreshAuth }}>
+    <AuthContext.Provider
+      value={{ user, role, loading, logout, refreshAuth }}
+    >
       {children}
     </AuthContext.Provider>
   );

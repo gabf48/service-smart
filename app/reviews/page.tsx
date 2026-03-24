@@ -1,77 +1,33 @@
-// app/reviews/page.tsx
 "use client";
 
-import React, { useCallback, useState, useEffect } from "react";
 import { ReviewsHero } from "./_components/ReviewsHero";
 import { ReviewsList } from "./_components/ReviewsList";
 import { ReviewModal } from "./_components/ReviewModal";
 import { useReviews } from "./_hooks/useReviews";
 import { useReviewForm } from "./_hooks/useReviewForm";
-import { useAuth } from "../context/AuthContext";
-
-type Notice = { type: "success" | "error"; text: string } | null;
+import { useReviewsPage } from "./_hooks/useReviewsPage";
+import { useAuth } from "../context/useAuth";
 
 export default function Page() {
   const { user } = useAuth();
-
   const { reviews, avg, count, loading, errorMsg, fetchApproved } = useReviews();
-
-  const [open, setOpen] = useState(false);
-  const [pageNotice, setPageNotice] = useState<Notice>(null);
-  const [modalNotice, setModalNotice] = useState<Notice>(null);
-
   const form = useReviewForm(user);
 
-  useEffect(() => {
-    if (open) setModalNotice(null);
-  }, [open]);
-
-  useEffect(() => {
-    if (errorMsg) {
-      setPageNotice({ type: "error", text: errorMsg });
-    }
-  }, [errorMsg]);
-
-  const openModal = useCallback(() => {
-    setModalNotice(null);
-    setOpen(true);
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setOpen(false);
-    setModalNotice(null);
-  }, []);
-
-  const handleSubmit = useCallback(async () => {
-    setModalNotice(null);
-
-    try {
-      await form.submitReview();
-
-      setOpen(false);
-      form.reset();
-      fetchApproved();
-
-      setPageNotice({
-        type: "success",
-        text: "Mulțumim! Review-ul a fost trimis și va apărea după aprobarea adminului.",
-      });
-    } catch (e: any) {
-      setModalNotice({
-        type: "error",
-        text: e?.message || "Eroare la trimiterea review-ului.",
-      });
-    }
-  }, [form, fetchApproved]);
+  const page = useReviewsPage({
+    errorMsg,
+    fetchApproved,
+    submitReview: form.submitReview,
+    resetForm: form.reset,
+  });
 
   return (
     <div className="space-bg min-h-dvh text-white" data-testid="reviews-page">
       <ReviewsHero
         avg={avg}
         count={count}
-        onOpen={openModal}
-        notice={pageNotice}
-        onCloseNotice={() => setPageNotice(null)}
+        onOpen={page.openModal}
+        notice={page.pageNotice}
+        onCloseNotice={() => page.setPageNotice(null)}
       />
 
       <div data-testid="reviews-list-section">
@@ -83,8 +39,8 @@ export default function Page() {
       </div>
 
       <ReviewModal
-        open={open}
-        onClose={closeModal}
+        open={page.open}
+        onClose={page.closeModal}
         submitting={form.submitting}
         isLogged={form.isLogged}
         computedLockedName={form.computedLockedName}
@@ -103,9 +59,9 @@ export default function Page() {
         previews={form.previews}
         onPickFiles={form.onPickFiles}
         removePicked={form.removePicked}
-        onSubmit={handleSubmit}
-        notice={modalNotice}
-        onDismissNotice={() => setModalNotice(null)}
+        onSubmit={page.handleSubmit}
+        notice={page.modalNotice}
+        onDismissNotice={() => page.setModalNotice(null)}
         uploadPct={form.uploadPct}
         maxCommentChars={form.MAX_COMMENT_CHARS ?? 1000}
       />

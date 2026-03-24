@@ -1,0 +1,14 @@
+.space-bg {
+  background: url("/space.gif") no-repeat center center;
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: #000;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .space-bg {
+    background-attachment: scroll;
+  }
+}
