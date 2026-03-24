@@ -23,7 +23,7 @@ export default function AdminReviewsPage() {
 
   return (
     <div
-      className="space-bg flex h-dvh items-center justify-center overflow-hidden p-6"
+      className="space-bg min-h-dvh overflow-x-hidden px-6 py-6 pb-28"
       data-testid="admin-reviews-page"
     >
       <AdminReviewsContent

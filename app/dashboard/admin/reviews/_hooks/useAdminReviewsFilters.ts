@@ -45,8 +45,15 @@ export function useAdminReviewsFilters(reviews: ReviewRow[]) {
   }, [tab, search, ratingFilter, sortMode]);
 
   useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [page, totalPages]);
+  if (totalPages <= 0) {
+    setPage(1);
+    return;
+  }
+
+  if (page > totalPages) {
+    setPage(totalPages);
+  }
+}, [page, totalPages]);
 
   const toggleSelected = (id: string) => {
     setSelectedIds((prev) =>

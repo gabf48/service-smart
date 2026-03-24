@@ -1,12 +1,19 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { FooterExpanded } from "./footer/FooterExpanded";
 import { FooterCollapsedBar } from "./footer/FooterCollapsedBar";
 import { VersionHistoryModal } from "./footer/VersionHistoryModal";
 import { getSortedVersions } from "./footer/footerUtils";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/dashboard/admin/reviews")) {
+    return null;
+  }
+
   const [expanded, setExpanded] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const expandedRef = useRef<HTMLDivElement | null>(null);
