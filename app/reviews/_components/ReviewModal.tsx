@@ -33,11 +33,15 @@ export function ReviewModal({
   uploadPct = 0,
   maxCommentChars = 1000,
 }: ReviewModalProps) {
-  const canSubmit =
-    !!comment.trim() &&
-    (isLogged ? !!computedLockedName.trim() : !!displayName.trim()) &&
-    rating >= 1 &&
-    rating <= 5;
+  const effectiveName = isLogged
+  ? computedLockedName || "Utilizator"
+  : displayName;
+
+const canSubmit =
+  !!comment.trim() &&
+  !!effectiveName.trim() &&
+  rating >= 1 &&
+  rating <= 5;
 
   return (
     <ReviewModalShell open={open} onClose={onClose}>

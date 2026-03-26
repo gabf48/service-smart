@@ -14,16 +14,19 @@ export function useReviewFormState(user: any) {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
 
-  const computedLockedName = useMemo(() => {
-    const metaName =
-      user?.user_metadata?.full_name || user?.user_metadata?.name || "";
+ const computedLockedName = useMemo(() => {
+  const metaName =
+    user?.user_metadata?.full_name ||
+    user?.user_metadata?.name ||
+    "";
 
-    if (metaName) return String(metaName);
+  if (metaName) return String(metaName);
 
-    const em = user?.email || "";
-    if (em.includes("@")) return em.split("@")[0];
-    return "";
-  }, [user]);
+  const email = user?.email || "";
+  if (email.includes("@")) return email.split("@")[0];
+
+  return "Utilizator";
+}, [user]);
 
   useEffect(() => {
     if (!isLogged) return;

@@ -30,7 +30,9 @@ export async function buildReviewFormData({
   pickedFiles,
   user,
 }: BuildReviewFormDataParams): Promise<BuildReviewFormDataResult> {
-  const nameToSend = isLogged ? computedLockedName : displayName;
+  const nameToSend = isLogged
+  ? computedLockedName || "Utilizator"
+  : displayName;
 
   if (!nameToSend?.trim()) {
     return { ok: false, error: "Numele este obligatoriu." };
