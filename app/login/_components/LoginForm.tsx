@@ -9,7 +9,10 @@ export function LoginForm({
   setPassword,
   loading,
   errorMsg,
+  forgotMsg,
+  forgotError,
   onSubmit,
+  onForgotPassword,
 }: {
   email: string;
   setEmail: (value: string) => void;
@@ -17,7 +20,10 @@ export function LoginForm({
   setPassword: (value: string) => void;
   loading: boolean;
   errorMsg: string | null;
+  forgotMsg: string | null;
+  forgotError: string | null;
   onSubmit: (e: React.FormEvent) => void;
+  onForgotPassword: () => void;
 }) {
   return (
     <form
@@ -62,6 +68,16 @@ export function LoginForm({
         toggleDataTestId="login-toggle-password"
       />
 
+      <button
+        type="button"
+        onClick={onForgotPassword}
+        disabled={loading}
+        className="self-start text-sm text-blue-400 transition hover:text-blue-300 disabled:opacity-60"
+        data-testid="login-forgot-password"
+      >
+        Ai uitat parola?
+      </button>
+
       {errorMsg && (
         <p
           id="login-error"
@@ -70,6 +86,26 @@ export function LoginForm({
           aria-live="polite"
         >
           {errorMsg}
+        </p>
+      )}
+
+      {forgotError && (
+        <p
+          className="mt-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"
+          data-testid="login-forgot-password-error"
+          aria-live="polite"
+        >
+          {forgotError}
+        </p>
+      )}
+
+      {forgotMsg && (
+        <p
+          className="mt-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200"
+          data-testid="login-forgot-password-success"
+          aria-live="polite"
+        >
+          {forgotMsg}
         </p>
       )}
 

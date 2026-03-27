@@ -12,12 +12,15 @@ export default function LoginPage() {
     setPassword,
     loading,
     errorMsg,
+    forgotMsg,
+    forgotError,
     handleLogin,
+    handleForgotPassword,
   } = useLoginForm();
 
   return (
     <div
-      className="space-bg flex h-dvh items-center justify-center overflow-hidden p-6"
+      className="space-bg flex min-h-dvh items-center justify-center p-6"
       data-testid="login-page"
     >
       <LoginCard>
@@ -28,7 +31,10 @@ export default function LoginPage() {
           setPassword={setPassword}
           loading={loading}
           errorMsg={errorMsg}
+          forgotMsg={forgotMsg}
+          forgotError={forgotError}
           onSubmit={handleLogin}
+          onForgotPassword={handleForgotPassword}
         />
       </LoginCard>
     </div>
