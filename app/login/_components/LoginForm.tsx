@@ -1,6 +1,8 @@
 "use client";
 
 import PasswordInput from "@/components/PasswordInput";
+import { LoginForgotPassword } from "./LoginForgotPassword";
+import { LoginMessages } from "./LoginMessages";
 
 export function LoginForm({
   email,
@@ -68,46 +70,16 @@ export function LoginForm({
         toggleDataTestId="login-toggle-password"
       />
 
-      <button
-        type="button"
-        onClick={onForgotPassword}
-        disabled={loading}
-        className="self-start text-sm text-blue-400 transition hover:text-blue-300 disabled:opacity-60"
-        data-testid="login-forgot-password"
-      >
-        Ai uitat parola?
-      </button>
+      <LoginForgotPassword
+        loading={loading}
+        onForgotPassword={onForgotPassword}
+      />
 
-      {errorMsg && (
-        <p
-          id="login-error"
-          className="mt-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"
-          data-testid="login-error"
-          aria-live="polite"
-        >
-          {errorMsg}
-        </p>
-      )}
-
-      {forgotError && (
-        <p
-          className="mt-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"
-          data-testid="login-forgot-password-error"
-          aria-live="polite"
-        >
-          {forgotError}
-        </p>
-      )}
-
-      {forgotMsg && (
-        <p
-          className="mt-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200"
-          data-testid="login-forgot-password-success"
-          aria-live="polite"
-        >
-          {forgotMsg}
-        </p>
-      )}
+      <LoginMessages
+        errorMsg={errorMsg}
+        forgotError={forgotError}
+        forgotMsg={forgotMsg}
+      />
 
       <button
         type="submit"
