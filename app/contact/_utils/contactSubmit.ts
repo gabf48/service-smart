@@ -80,18 +80,22 @@ export async function submitContactForm({
     throw new Error(dbErr.message);
   }
 
-  await fetch("/api/send-contact", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name,
-      email: finalEmail,
-      phone,
-      reason,
-      description,
-      attachments: uploadedUrls,
-    }),
-  });
+  const res = await fetch("/api/send-contact", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    name,
+    email: finalEmail,
+    phone,
+    reason,
+    description,
+    attachments: uploadedUrls,
+  }),
+});
+
+if (!res.ok) {
+  throw new Error("Mesajul a fost salvat, dar emailul nu a putut fi trimis.");
+}
 }
