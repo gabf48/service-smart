@@ -10,7 +10,10 @@ import { getSortedVersions } from "./footer/footerUtils";
 export default function Footer() {
   const pathname = usePathname();
 
-  if (pathname?.startsWith("/dashboard/admin/reviews")) {
+  if (
+    pathname?.startsWith("/dashboard/admin/reviews") ||
+    pathname?.startsWith("/reviews")
+  ) {
     return null;
   }
 
