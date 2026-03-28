@@ -17,24 +17,24 @@ test.describe("Logged user reviews", () => {
   });
 
   test.beforeAll(async () => {
-  await cleanupPlaywrightReviews("PW");
-});
+    await cleanupPlaywrightReviews("PW");
+  });
 
-test.afterAll(async () => {
-  await cleanupPlaywrightReviews("PW");
-});
+  test.afterAll(async () => {
+    await cleanupPlaywrightReviews("PW");
+  });
 
   test("@smoke @user logged user sees locked name", async ({ page }) => {
-  await page.goto("/reviews");
+    await page.goto("/reviews");
 
-  await page.getByTestId("reviews-open-modal").click();
+    await page.getByTestId("reviews-open-modal").click();
 
-  const nameInput = page.getByTestId("review-input-name");
+    const nameInput = page.getByTestId("review-input-name");
 
-  await expect(nameInput).toBeVisible();
-  await expect(nameInput).toBeDisabled();
-  await expect(nameInput).not.toHaveValue("");
-});
+    await expect(nameInput).toBeVisible();
+    await expect(nameInput).toBeDisabled();
+    await expect(nameInput).not.toHaveValue("");
+  });
 
   test("@regression @user logged user sees submit disabled before valid comment", async ({ page }) => {
     await page.goto("/reviews");
@@ -49,6 +49,7 @@ test.afterAll(async () => {
     await page.goto("/reviews");
 
     await page.getByTestId("reviews-open-modal").click();
+    await expect(page.getByTestId("review-star-4")).toBeVisible();
 
     await page.getByTestId("review-star-4").click();
 
@@ -59,17 +60,19 @@ test.afterAll(async () => {
     const comment = uniqueText("PW logged user review");
 
     await page.goto("/reviews");
-
     await page.getByTestId("reviews-open-modal").click();
+
+    await expect(page.getByTestId("review-modal")).toBeVisible();
+    await expect(page.getByTestId("review-modal-title")).toBeVisible();
+    await expect(page.getByTestId("review-star-5")).toBeVisible();
 
     await page.getByTestId("review-star-5").click();
     await page.getByTestId("review-input-comment").fill(comment);
 
     await expect(page.getByTestId("review-submit")).toBeEnabled();
-
     await page.getByTestId("review-submit").click();
 
-    await expect(page.getByTestId("review-modal")).not.toBeVisible();
+    await expect(page.getByTestId("review-modal")).toHaveCount(0);
     await expect(page.getByTestId("reviews-page-notice")).toBeVisible();
     await expect(page.getByTestId("reviews-page-notice-text")).toContainText("Mulțumim");
   });
@@ -78,7 +81,6 @@ test.afterAll(async () => {
     const imagePath = path.resolve("tests/fixtures/test-image.jpg");
 
     await page.goto("/reviews");
-
     await page.getByTestId("reviews-open-modal").click();
 
     await page.getByTestId("review-input-files").setInputFiles(imagePath);
@@ -95,11 +97,15 @@ test.afterAll(async () => {
     const comment = uniqueText("PW notice close review");
 
     await page.goto("/reviews");
-
     await page.getByTestId("reviews-open-modal").click();
+
+    await expect(page.getByTestId("review-modal")).toBeVisible();
+    await expect(page.getByTestId("review-star-5")).toBeVisible();
+
     await page.getByTestId("review-star-5").click();
     await page.getByTestId("review-input-comment").fill(comment);
 
+    await expect(page.getByTestId("review-submit")).toBeEnabled();
     await page.getByTestId("review-submit").click();
 
     await expect(page.getByTestId("reviews-page-notice")).toBeVisible();
@@ -109,26 +115,26 @@ test.afterAll(async () => {
     await expect(page.getByTestId("reviews-page-notice")).toHaveCount(0);
   });
 
-test("@regression @user logged user can close review modal", async ({ page }) => {
-  await page.goto("/reviews");
+  test("@regression @user logged user can close review modal", async ({ page }) => {
+    await page.goto("/reviews");
 
-  await page.getByTestId("reviews-open-modal").click();
-  await expect(page.getByTestId("review-modal")).toBeVisible();
+    await page.getByTestId("reviews-open-modal").click();
+    await expect(page.getByTestId("review-modal")).toBeVisible();
 
-  await page.getByTestId("review-modal-close").click();
+    await page.getByTestId("review-modal-close").click();
 
-  await expect(page.getByTestId("review-modal")).toHaveCount(0);
-});
+    await expect(page.getByTestId("review-modal")).toHaveCount(0);
+  });
 
-test("@regression @user logged user can preview multiple images", async ({ page }) => {
-  const file1 = path.resolve("tests/fixtures/test-image-1.jpg");
-  const file2 = path.resolve("tests/fixtures/test-image-2.jpg");
+  test("@regression @user logged user can preview multiple images", async ({ page }) => {
+    const file1 = path.resolve("tests/fixtures/test-image-1.jpg");
+    const file2 = path.resolve("tests/fixtures/test-image-2.jpg");
 
-  await page.goto("/reviews");
-  await page.getByTestId("reviews-open-modal").click();
+    await page.goto("/reviews");
+    await page.getByTestId("reviews-open-modal").click();
 
-  await page.getByTestId("review-input-files").setInputFiles([file1, file2]);
+    await page.getByTestId("review-input-files").setInputFiles([file1, file2]);
 
-  await expect(page.getByTestId("review-preview-item")).toHaveCount(2);
-});
+    await expect(page.getByTestId("review-preview-item")).toHaveCount(2);
+  });
 });
