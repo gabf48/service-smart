@@ -21,7 +21,7 @@ setup("authenticate as admin", async ({ page }) => {
   fs.mkdirSync(authDir, { recursive: true });
 
   await page.goto("/login");
-
+  await page.waitForLoadState("domcontentloaded");
   await page.getByTestId("login-input-email").fill(email);
   await page.getByTestId("login-input-password").fill(password);
   await page.getByTestId("login-submit").click();

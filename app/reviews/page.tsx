@@ -9,7 +9,7 @@ import { useReviewsPage } from "./_hooks/useReviewsPage";
 import { useAuth } from "../context/useAuth";
 
 export default function Page() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { reviews, avg, count, loading, errorMsg, fetchApproved } = useReviews();
   const form = useReviewForm(user);
 
@@ -19,6 +19,16 @@ export default function Page() {
     submitReview: form.submitReview,
     resetForm: form.reset,
   });
+
+  if (authLoading) {
+    return (
+      <div className="space-bg min-h-dvh text-white" data-testid="reviews-page">
+        <div className="mx-auto max-w-6xl px-4 py-14 text-white/70">
+          Se încarcă...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-bg min-h-dvh text-white" data-testid="reviews-page">
