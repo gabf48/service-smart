@@ -27,7 +27,6 @@ on:
   push:
     branches:
       - stg
-      - main
 
 jobs:
   e2e:
@@ -47,11 +46,7 @@ jobs:
       - name: Resolve environment
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
-            if [ "${{ github.ref_name }}" = "main" ]; then
-              echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_PRODUCTION }}" >> $GITHUB_ENV
-            else
-              echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_STAGING }}" >> $GITHUB_ENV
-            fi
+            echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_STAGING }}" >> $GITHUB_ENV
           else
             if [ "${{ github.event.inputs.environment }}" = "production" ]; then
               echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_PRODUCTION }}" >> $GITHUB_ENV
@@ -63,13 +58,8 @@ jobs:
       - name: Resolve Supabase cleanup environment
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
-            if [ "${{ github.ref_name }}" = "main" ]; then
-              echo "PLAYWRIGHT_SUPABASE_URL=${{ secrets.PLAYWRIGHT_SUPABASE_URL_PRODUCTION }}" >> $GITHUB_ENV
-              echo "PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY=${{ secrets.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY_PRODUCTION }}" >> $GITHUB_ENV
-            else
-              echo "PLAYWRIGHT_SUPABASE_URL=${{ secrets.PLAYWRIGHT_SUPABASE_URL_STAGING }}" >> $GITHUB_ENV
-              echo "PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY=${{ secrets.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY_STAGING }}" >> $GITHUB_ENV
-            fi
+            echo "PLAYWRIGHT_SUPABASE_URL=${{ secrets.PLAYWRIGHT_SUPABASE_URL_STAGING }}" >> $GITHUB_ENV
+            echo "PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY=${{ secrets.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY_STAGING }}" >> $GITHUB_ENV
           else
             if [ "${{ github.event.inputs.environment }}" = "production" ]; then
               echo "PLAYWRIGHT_SUPABASE_URL=${{ secrets.PLAYWRIGHT_SUPABASE_URL_PRODUCTION }}" >> $GITHUB_ENV
@@ -99,6 +89,19 @@ jobs:
               echo "PLAYWRIGHT_GREP=" >> $GITHUB_ENV
             fi
           fi
+
+      - name: Wait for target environment
+        run: |
+          for i in {1..30}; do
+            if curl -fsS "$PLAYWRIGHT_BASE_URL/login" > /dev/null; then
+              echo "Target environment is ready"
+              exit 0
+            fi
+            echo "Waiting for $PLAYWRIGHT_BASE_URL ..."
+            sleep 10
+          done
+          echo "Target environment did not become ready in time"
+          exit 1
 
       - name: Install dependencies
         run: npm ci

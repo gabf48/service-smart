@@ -62,6 +62,19 @@ jobs:
       - name: Set production base URL
         run: echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_PRODUCTION }}" >> $GITHUB_ENV
 
+      - name: Wait for production to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -fsS "$PLAYWRIGHT_BASE_URL/login" > /dev/null; then
+              echo "Production is ready"
+              exit 0
+            fi
+            echo "Waiting for production..."
+            sleep 10
+          done
+          echo "Production did not become ready in time"
+          exit 1
+
       - name: Install dependencies
         run: npm ci
 
