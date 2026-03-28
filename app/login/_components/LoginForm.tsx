@@ -15,6 +15,7 @@ export function LoginForm({
   forgotError,
   onSubmit,
   onForgotPassword,
+  hydrated,
 }: {
   email: string;
   setEmail: (value: string) => void;
@@ -26,14 +27,20 @@ export function LoginForm({
   forgotError: string | null;
   onSubmit: (e: React.FormEvent) => void;
   onForgotPassword: () => void;
+  hydrated: boolean;
 }) {
+  const submitDisabled = loading || !hydrated;
+
   return (
     <form
       onSubmit={onSubmit}
+      method="post"
       className="mt-6 flex flex-col gap-3"
       data-testid="login-form"
       noValidate
     >
+      {hydrated && <div data-testid="login-hydrated" hidden />}
+
       <label htmlFor="email" className="text-sm text-white/70">
         Email
       </label>
@@ -83,7 +90,7 @@ export function LoginForm({
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={submitDisabled}
         className="mt-4 w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white disabled:opacity-60"
         data-testid="login-submit"
       >

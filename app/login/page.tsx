@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { LoginCard } from "./_components/LoginCard";
 import { LoginForm } from "./_components/LoginForm";
 import { useLoginForm } from "./_hooks/useLoginForm";
@@ -18,9 +19,15 @@ export default function LoginPage() {
     handleForgotPassword,
   } = useLoginForm();
 
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
   return (
     <div
-      className="space-bg flex min-h-dvh items-center justify-center p-6"
+      className="space-bg flex h-dvh items-center justify-center overflow-hidden p-6"
       data-testid="login-page"
     >
       <LoginCard>
@@ -35,6 +42,7 @@ export default function LoginPage() {
           forgotError={forgotError}
           onSubmit={handleLogin}
           onForgotPassword={handleForgotPassword}
+          hydrated={hydrated}
         />
       </LoginCard>
     </div>

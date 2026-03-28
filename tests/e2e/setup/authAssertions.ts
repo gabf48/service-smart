@@ -3,7 +3,8 @@ import { expect, type Page } from "@playwright/test";
 export async function expectLoginFormReady(page: Page) {
   await expect(page.getByTestId("login-input-email")).toBeVisible({ timeout: 15000 });
   await expect(page.getByTestId("login-input-password")).toBeVisible({ timeout: 15000 });
-  await expect(page.getByTestId("login-submit")).toBeVisible({ timeout: 15000 });
+  await expect(page.getByTestId("login-hydrated")).toBeAttached({ timeout: 15000 });
+  await expect(page.getByTestId("login-submit")).toBeEnabled({ timeout: 15000 });
 }
 
 export async function expectLoginSucceeded(
