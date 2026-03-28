@@ -8,7 +8,7 @@ export function useReviewNotifier() {
   const playNewReviewSound = () => {
     try {
       if (!audioRef.current) {
-        audioRef.current = new Audio("/sounds/review-notification.mp3");
+        audioRef.current = new Audio("/sounds/review-notification.wav");
         audioRef.current.volume = 0.35;
       }
 

@@ -9,20 +9,16 @@ import { getSortedVersions } from "./footer/footerUtils";
 
 export default function Footer() {
   const pathname = usePathname();
-
-  if (
-    pathname?.startsWith("/dashboard/admin/reviews") ||
-    pathname?.startsWith("/reviews")
-  ) {
-    return null;
-  }
-
   const [expanded, setExpanded] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const expandedRef = useRef<HTMLDivElement | null>(null);
 
   const sortedVersions = useMemo(() => getSortedVersions(), []);
   const latestVersion = sortedVersions[0]?.version || "0.0.0";
+
+  const hideFooter =
+    pathname?.startsWith("/dashboard/admin/reviews") ||
+    pathname?.startsWith("/reviews");
 
   useEffect(() => {
     const onDown = (e: Event) => {
@@ -38,6 +34,10 @@ export default function Footer() {
       window.removeEventListener("touchstart", onDown);
     };
   }, [expanded]);
+
+  if (hideFooter) {
+    return null;
+  }
 
   return (
     <>

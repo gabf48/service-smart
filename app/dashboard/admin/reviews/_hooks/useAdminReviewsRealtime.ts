@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { ReviewRow, ReviewsTab, Notice } from "../_types/reviews";
-import { useReviewNotifier } from "./useReviewNotifier";
 
 export function useAdminReviewsRealtime({
   setReviews,
@@ -16,7 +15,6 @@ export function useAdminReviewsRealtime({
 }) {
   const [newPendingCount, setNewPendingCount] = useState(0);
   const initialLoadDoneRef = useRef(false);
-  const { playNewReviewSound } = useReviewNotifier();
 
   useEffect(() => {
     if (tab === "pending") setNewPendingCount(0);
@@ -50,11 +48,6 @@ export function useAdminReviewsRealtime({
           if (initialLoadDoneRef.current) {
             if (payload.eventType === "INSERT") {
               setNewPendingCount((prev) => prev + 1);
-              setNotice({
-                type: "success",
-                text: "A sosit un review nou.",
-              });
-              playNewReviewSound();
             }
           } else {
             initialLoadDoneRef.current = true;
@@ -65,12 +58,19 @@ export function useAdminReviewsRealtime({
       )
       .subscribe((status) => {
         console.log("[Realtime status]", status);
+
+        if (status === "CHANNEL_ERROR") {
+          setNotice({
+            type: "error",
+            text: "Realtime pentru review-uri nu s-a putut conecta.",
+          });
+        }
       });
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [setReviews, setNotice, playNewReviewSound]);
+  }, [setReviews, setNotice]);
 
   return { newPendingCount };
 }
