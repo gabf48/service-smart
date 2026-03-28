@@ -1,6 +1,5 @@
 import type { AutoReplyArgs } from "../contactEmailTypes";
-import { escapeHtml, nl2br } from "../contactEmailHelpers";
-
+import { escapeHtml, nl2br, truncateText } from "../contactEmailHelpers";
 export function buildAutoReplyHtml({
   name,
   email,
@@ -13,7 +12,7 @@ export function buildAutoReplyHtml({
   const safeEmail = escapeHtml(email || "-");
   const safePhone = escapeHtml(phone || "-");
   const safeReason = escapeHtml(reason || "-");
-  const safeDescription = nl2br(description || "-");
+const previewDescription = nl2br(truncateText(description || "-", 220));
   const safeSiteUrl = escapeHtml(siteUrl);
 
   return `
@@ -54,7 +53,7 @@ export function buildAutoReplyHtml({
               <p style="margin:0 0 8px 0;font-size:14px;color:#e5e7eb;"><b>Motiv:</b> ${safeReason}</p>
               <p style="margin:0;font-size:14px;line-height:1.7;color:#e5e7eb;">
                 <b>Mesaj:</b><br/>
-                ${safeDescription}
+               ${previewDescription}
               </p>
             </div>
 
