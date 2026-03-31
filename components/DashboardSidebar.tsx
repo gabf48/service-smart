@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/app/context/AuthContext";
-
+import { useAuth } from "@/app/context/useAuth";
 export default function DashboardSidebar() {
   const { role } = useAuth();
 
@@ -13,6 +12,9 @@ export default function DashboardSidebar() {
           <Link href="/dashboard/user/history" className="hover:bg-gray-700 px-2 py-1 rounded">
             History
           </Link>
+          <Link href="/settings/security" className="hover:bg-gray-700 px-2 py-1 rounded">
+  Security
+</Link>
         </>
       )}
 
@@ -27,6 +29,9 @@ export default function DashboardSidebar() {
           <Link href="/dashboard/admin/reviews" className="hover:bg-gray-700 px-2 py-1 rounded">
             Reviews
           </Link>
+          <Link href="/settings/security" className="hover:bg-gray-700 px-2 py-1 rounded">
+  Security
+</Link>
         </>
       )}
     </aside>

@@ -23,7 +23,6 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <body className="space-bg min-h-screen flex flex-col">
-        <AppVersion />
         <AuthProvider>
          <LayoutShell>{children}</LayoutShell>
         </AuthProvider>

@@ -3,8 +3,8 @@ import type { UserRow } from "../_types/users";
 
 export async function fetchUsers() {
   const { data, error } = await supabase
-    .from("profiles")
-    .select("id,email,role,is_active")
+    .from("admin_users_view")
+    .select("*")
     .order("email");
 
   return {

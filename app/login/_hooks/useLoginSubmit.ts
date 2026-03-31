@@ -75,8 +75,16 @@ export function useLoginSubmit() {
       .eq("id", user.id)
       .single();
 
-    const role = profile?.role ?? "user";
-    router.push(role === "admin" ? "/dashboard/admin" : "/dashboard/user");
+    const { data: factors } = await supabase.auth.mfa.listFactors();
+const has2FA = (factors?.totp ?? []).length > 0;
+
+if (has2FA) {
+  router.push("/mfa/verify");
+  return;
+}
+
+const role = profile?.role ?? "user";
+router.push(role === "admin" ? "/dashboard/admin" : "/dashboard/user");
   };
 
   return { handleLogin };
