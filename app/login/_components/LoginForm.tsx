@@ -29,7 +29,7 @@ export function LoginForm({
   onForgotPassword: () => void;
   hydrated: boolean;
 }) {
-  const submitDisabled = loading || !hydrated;
+const submitDisabled = loading;
 
   return (
     <form
