@@ -19,12 +19,12 @@ export function AdminReviewsHeader({
 }) {
   return (
     <div
-      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+      className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       data-testid="admin-reviews-header"
     >
       <div>
         <h1 className="text-3xl font-bold text-white">Reviews</h1>
-        <p className="text-white/70 text-sm">
+        <p className="text-sm text-white/70">
           Aprobă sau respinge review-urile înainte să apară public.
         </p>
       </div>
@@ -42,9 +42,7 @@ export function AdminReviewsHeader({
         >
           Pending {pendingCount}
           {newPendingCount > 0 && (
-            <span className="ml-2 text-xs text-red-400">
-              +{newPendingCount}
-            </span>
+            <span className="ml-2 text-xs text-red-400">+{newPendingCount}</span>
           )}
         </button>
 
