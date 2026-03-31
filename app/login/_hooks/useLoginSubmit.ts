@@ -2,13 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { TERMS_VERSION } from "@/app/terms";
 import { mapSupabaseAuthErrorToRo } from "@/utils/authErrorsRo";
-
-type PendingTerms = {
-  terms_version: string;
-  email_snapshot?: string;
-};
+import {
+  getUserRole,
+  saveTermsAcceptance,
+  userHas2FA,
+} from "../_utils/loginPostActions";
+import { redirectAfterLogin } from "../_utils/loginRedirect";
 
 export function useLoginSubmit() {
   const router = useRouter();
@@ -27,64 +27,35 @@ export function useLoginSubmit() {
     setLoading(true);
     setErrorMsg(null);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
-
-    if (error) {
-      setErrorMsg(mapSupabaseAuthErrorToRo(error.message));
-      setLoading(false);
-      return;
-    }
-
-    const user = data.user;
-    if (!user) {
-      setErrorMsg("Sesiunea nu este disponibilă.");
-      setLoading(false);
-      return;
-    }
-
-    let pending: PendingTerms | null = null;
     try {
-      const raw = localStorage.getItem("pending_terms_acceptance");
-      pending = raw ? JSON.parse(raw) : null;
-    } catch {}
-
-    const { data: existing } = await supabase
-      .from("terms_acceptances")
-      .select("id")
-      .eq("user_id", user.id)
-      .eq("terms_version", TERMS_VERSION)
-      .maybeSingle();
-
-    if (!existing) {
-      await supabase.from("terms_acceptances").insert({
-        user_id: user.id,
-        terms_version: TERMS_VERSION,
-        email_snapshot: pending?.email_snapshot ?? user.email ?? null,
-        user_agent: navigator.userAgent,
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
       });
 
-      localStorage.removeItem("pending_terms_acceptance");
+      if (error) {
+        setErrorMsg(mapSupabaseAuthErrorToRo(error.message));
+        setLoading(false);
+        return;
+      }
+
+      const user = data.user;
+      if (!user) {
+        setErrorMsg("Sesiunea nu este disponibilă.");
+        setLoading(false);
+        return;
+      }
+
+      await saveTermsAcceptance(user);
+      const role = await getUserRole(user.id);
+      const has2FA = await userHas2FA();
+
+      setLoading(false);
+      redirectAfterLogin({ router, role, has2FA });
+    } catch {
+      setErrorMsg("Nu s-a putut finaliza logarea.");
+      setLoading(false);
     }
-
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-
-    const { data: factors } = await supabase.auth.mfa.listFactors();
-const has2FA = (factors?.totp ?? []).length > 0;
-
-if (has2FA) {
-  router.push("/mfa/verify");
-  return;
-}
-
-const role = profile?.role ?? "user";
-router.push(role === "admin" ? "/dashboard/admin" : "/dashboard/user");
   };
 
   return { handleLogin };
