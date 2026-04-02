@@ -7,7 +7,6 @@ export function LoginForgotPassword({
   loading: boolean;
   onForgotPassword: () => void;
 }) {
-  
   return (
     <button
       type="button"
