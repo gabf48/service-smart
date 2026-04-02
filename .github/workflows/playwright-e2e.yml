@@ -29,7 +29,48 @@ on:
       - stg
 
 jobs:
+  deploy-staging:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'stg' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Deploy to staging over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.STG_SSH_HOST }}
+          username: ${{ secrets.STG_SSH_USER }}
+          key: ${{ secrets.STG_SSH_KEY }}
+          script: |
+            set -e
+
+            cd ${{ secrets.STG_APP_DIR }}
+
+            echo "==> Fetch latest code"
+            git fetch origin
+            git reset --hard origin/stg
+
+            echo "==> Set app version"
+            export NEXT_PUBLIC_APP_VERSION=$(git rev-parse --short HEAD)
+
+            echo "==> Install dependencies"
+            npm ci
+
+            echo "==> Build app"
+            npm run build:versioned
+
+            echo "==> Restart PM2"
+            pm2 restart ${{ secrets.STG_PM2_APP_NAME }} --update-env
+
+            echo "==> Verify PM2 process"
+            pm2 describe ${{ secrets.STG_PM2_APP_NAME }}
+
+            echo "==> Deployed version:"
+            git rev-parse --short HEAD
+
   e2e:
+    needs: deploy-staging
+    if: ${{ always() && (github.event_name != 'push' || github.ref_name != 'stg' || needs.deploy-staging.result == 'success') }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
