@@ -30,12 +30,12 @@ export function DesktopNav({
 
       {!user && (
         <>
-          <Link href="/login" className={linkClass(isActivePath(pathname, "/login"))}>
+          {/* <Link href="/login" className={linkClass(isActivePath(pathname, "/login"))}>
             Autentificare
           </Link>
           <Link href="/register" className={linkClass(isActivePath(pathname, "/register"))}>
             Cont nou
-          </Link>
+          </Link> */}
         </>
       )}
 

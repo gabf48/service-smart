@@ -34,7 +34,7 @@ export function MobileNav({
 
             {!user && (
               <>
-                <Link
+                {/* <Link
                   href="/login"
                   className={mobileItemClass(isActivePath(pathname, "/login"))}
                   onClick={onClose}
@@ -47,7 +47,7 @@ export function MobileNav({
                   onClick={onClose}
                 >
                   Cont nou
-                </Link>
+                </Link> */}
               </>
             )}
 
