@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { RoleFilter, UserRow } from "../_types/users";
+import type { UserRow, RoleFilter } from "../_types/users";
 
 export function useAdminUsersFilters(users: UserRow[]) {
   const [search, setSearch] = useState("");
@@ -10,10 +10,30 @@ export function useAdminUsersFilters(users: UserRow[]) {
   const filteredUsers = useMemo(() => {
     return users.filter((user) => {
       const matchesSearch =
-        !search || user.email.toLowerCase().includes(search.toLowerCase());
+        user.email.toLowerCase().includes(search.toLowerCase());
 
-      const matchesRole =
-        roleFilter === "all" ? true : user.role === roleFilter;
+      let matchesRole = true;
+
+      switch (roleFilter) {
+        case "admin":
+          matchesRole = user.role === "admin";
+          break;
+
+        case "user":
+          matchesRole = user.role === "user";
+          break;
+
+        case "2fa-enabled":
+          matchesRole = user.two_factor_enabled === true;
+          break;
+
+        case "2fa-disabled":
+          matchesRole = user.two_factor_enabled === false;
+          break;
+
+        default:
+          matchesRole = true;
+      }
 
       return matchesSearch && matchesRole;
     });

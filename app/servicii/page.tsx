@@ -1,74 +1,76 @@
 "use client";
 
-import { useState } from "react";
-
-import {
-  services,
-  categories,
-  PHONE_E164,
-  PHONE_DISPLAY,
-  WHATSAPP_E164,
-} from "./_data";
-
-import { ServicesHero } from "./_components/ServicesHero";
-import { ServicesCategories } from "./_components/ServicesCategories";
-import { ServicesGrid } from "./_components/ServicesGrid";
-import { ServiceDetailsModal } from "./_components/ServiceDetailsModal";
-
-import type { Service } from "./_types/services";
-
 export default function ServiciiPage() {
-  const [active, setActive] = useState<Service | null>(null);
-  const [activeCategory, setActiveCategory] = useState("hardware");
-
-  const filteredServices = services.filter(
-    (s) => s.category === activeCategory
-  );
-
   return (
-    <div className="space-bg min-h-dvh text-white">
-      {/* overlay pentru contrast */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] pointer-events-none" />
+    <div className="min-h-screen bg-black px-4 py-20 text-white">
+      <div className="mx-auto max-w-3xl text-center">
+        <h1 className="mb-6 text-4xl font-bold">
+          Servicii & Prețuri
+        </h1>
 
-      <div className="relative mx-auto max-w-6xl px-4">
-        {/* HERO */}
-        <ServicesHero
-          phoneE164={PHONE_E164}
-          phoneDisplay={PHONE_DISPLAY}
-          whatsappE164={WHATSAPP_E164}
-        />
+        <p className="mb-12 text-white/80">
+          Prețuri corecte, fără surprize. Pentru orice problemă, sună sau scrie direct.
+        </p>
 
-        {/* CATEGORIES */}
-        <div className="mt-10">
-          <ServicesCategories
-            categories={categories}
-            activeCategory={activeCategory}
-            setActiveCategory={setActiveCategory}
-          />
+        <div className="space-y-6 text-left">
+          {/* SERVICE 1 */}
+          <div className="rounded-2xl bg-white/5 p-6 border border-white/10">
+            <h2 className="text-xl font-semibold">
+              Laptop / PC nu pornește
+            </h2>
+            <p className="mt-2 text-white/70">
+              Diagnostic rapid + reparație hardware/software
+            </p>
+            <p className="mt-3 text-lg font-bold text-blue-400">
+              de la 100 RON
+            </p>
+          </div>
+
+          {/* SERVICE 2 */}
+          <div className="rounded-2xl bg-white/5 p-6 border border-white/10">
+            <h2 className="text-xl font-semibold">
+              Laptop lent / blocat
+            </h2>
+            <p className="mt-2 text-white/70">
+              Curățare, optimizare și upgrade
+            </p>
+            <p className="mt-3 text-lg font-bold text-blue-400">
+              de la 150 RON
+            </p>
+          </div>
+
+          {/* SERVICE 3 */}
+          <div className="rounded-2xl bg-white/5 p-6 border border-white/10">
+            <h2 className="text-xl font-semibold">
+              Instalare Windows + programe
+            </h2>
+            <p className="mt-2 text-white/70">
+              Instalare completă + drivere + setup inițial
+            </p>
+            <p className="mt-3 text-lg font-bold text-blue-400">
+              de la 150 RON
+            </p>
+          </div>
         </div>
 
-        {/* GRID */}
-        <div className="mt-14">
-          <ServicesGrid
-            categories={categories}
-            activeCategory={activeCategory}
-            services={filteredServices}
-            onOpenDetails={(id: string) => {
-              const found = services.find((s) => s.id === id);
-              if (found) setActive(found);
-            }}
-          />
+        {/* CTA */}
+        <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:justify-center">
+          <a
+            href="tel:+40746263481"
+            className="rounded-xl bg-blue-600 px-6 py-3 font-semibold hover:bg-blue-700"
+          >
+            📞 Sună acum
+          </a>
+
+          <a
+            href="https://wa.me/40746263481"
+            target="_blank"
+            className="rounded-xl bg-green-600 px-6 py-3 font-semibold hover:bg-green-700"
+          >
+            💬 WhatsApp
+          </a>
         </div>
       </div>
-
-      {/* MODAL */}
-      <ServiceDetailsModal
-        active={active}
-        onClose={() => setActive(null)}
-        phoneE164={PHONE_E164}
-        phoneDisplay={PHONE_DISPLAY}
-        whatsappE164={WHATSAPP_E164}
-      />
     </div>
   );
 }

@@ -17,9 +17,11 @@
     "test:e2e:user": "playwright test --grep @user",
     "test:e2e:admin": "playwright test --grep @admin",
     "build:versioned": "NEXT_PUBLIC_APP_VERSION=$(git rev-parse --short HEAD) NEXT_PUBLIC_GIT_SHA=$(git rev-parse HEAD) NEXT_PUBLIC_BUILD_DATE=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\") next build",
-"dev:versioned": "NEXT_PUBLIC_APP_VERSION=$(git rev-parse --short HEAD) NEXT_PUBLIC_GIT_SHA=$(git rev-parse HEAD) NEXT_PUBLIC_BUILD_DATE=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\") next dev"
+    "dev:versioned": "NEXT_PUBLIC_APP_VERSION=$(git rev-parse --short HEAD) NEXT_PUBLIC_GIT_SHA=$(git rev-parse HEAD) NEXT_PUBLIC_BUILD_DATE=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\") next dev"
   },
   "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.15.0",
+    "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.98.0",
     "leaflet": "^1.9.4",
     "next": "16.1.6",

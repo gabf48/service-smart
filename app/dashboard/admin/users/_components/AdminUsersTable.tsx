@@ -22,12 +22,13 @@ export function AdminUsersTable({
 }) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/20">
-      <table className="w-full min-w-[900px] text-sm">
+      <table className="w-full min-w-[980px] text-sm">
         <thead className="bg-white/5">
           <tr className="text-white/80">
             <th className="p-4 text-left font-semibold">Email</th>
             <th className="p-4 text-left font-semibold">Role</th>
             <th className="p-4 text-left font-semibold">Status</th>
+            <th className="p-4 text-left font-semibold">2FA</th>
             <th className="p-4 text-left font-semibold">Actions</th>
             <th className="p-4 text-left font-semibold">User ID</th>
           </tr>

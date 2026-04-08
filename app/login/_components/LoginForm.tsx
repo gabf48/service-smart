@@ -29,7 +29,7 @@ export function LoginForm({
   onForgotPassword: () => void;
   hydrated: boolean;
 }) {
-  const submitDisabled = loading || !hydrated;
+const submitDisabled = loading;
 
   return (
     <form
@@ -88,8 +88,12 @@ export function LoginForm({
         forgotMsg={forgotMsg}
       />
 
-      <button
-        type="submit"
+   <button
+  type="button"
+  onClick={(e) => {
+    console.log("CLICK LOGIN");
+    onSubmit(e as any);
+  }}
         disabled={submitDisabled}
         className="mt-4 w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white disabled:opacity-60"
         data-testid="login-submit"

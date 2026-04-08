@@ -3,6 +3,7 @@
 import type { UserRow } from "../_types/users";
 import { AdminUsersRoleBadge } from "./AdminUsersRoleBadge";
 import { AdminUsersStatusBadge } from "./AdminUsersStatusBadge";
+import { AdminUsersTwoFactorBadge } from "./AdminUsersTwoFactorBadge";
 import { AdminUsersActionButtons } from "./AdminUsersActionButtons";
 
 export function AdminUsersRow({
@@ -32,6 +33,10 @@ export function AdminUsersRow({
 
       <td className="p-4">
         <AdminUsersStatusBadge isActive={user.is_active} />
+      </td>
+
+      <td className="p-4">
+        <AdminUsersTwoFactorBadge enabled={user.two_factor_enabled} />
       </td>
 
       <td className="p-4">

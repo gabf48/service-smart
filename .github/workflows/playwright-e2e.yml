@@ -24,119 +24,42 @@ on:
           - admin
           - all
 
-  push:
-    branches:
-      - stg
-
 jobs:
-  e2e:
+  deploy-staging:
+    if: ${{ github.event.inputs.environment == 'staging' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Deploy to staging over SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          node-version: 20
-          cache: npm
+          host: ${{ secrets.STG_SSH_HOST }}
+          username: ${{ secrets.STG_SSH_USER }}
+          key: ${{ secrets.STG_SSH_KEY }}
+          script: |
+            set -e
 
-      - name: Resolve environment
-        run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
-            echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_STAGING }}" >> $GITHUB_ENV
-          else
-            if [ "${{ github.event.inputs.environment }}" = "production" ]; then
-              echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_PRODUCTION }}" >> $GITHUB_ENV
-            else
-              echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_STAGING }}" >> $GITHUB_ENV
-            fi
-          fi
+            cd ${{ secrets.STG_APP_DIR }}
 
-      - name: Resolve Supabase cleanup environment
-        run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
-            echo "PLAYWRIGHT_SUPABASE_URL=${{ secrets.PLAYWRIGHT_SUPABASE_URL_STAGING }}" >> $GITHUB_ENV
-            echo "PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY=${{ secrets.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY_STAGING }}" >> $GITHUB_ENV
-          else
-            if [ "${{ github.event.inputs.environment }}" = "production" ]; then
-              echo "PLAYWRIGHT_SUPABASE_URL=${{ secrets.PLAYWRIGHT_SUPABASE_URL_PRODUCTION }}" >> $GITHUB_ENV
-              echo "PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY=${{ secrets.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY_PRODUCTION }}" >> $GITHUB_ENV
-            else
-              echo "PLAYWRIGHT_SUPABASE_URL=${{ secrets.PLAYWRIGHT_SUPABASE_URL_STAGING }}" >> $GITHUB_ENV
-              echo "PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY=${{ secrets.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY_STAGING }}" >> $GITHUB_ENV
-            fi
-          fi
+            echo "==> Fetch latest code"
+            git fetch origin
+            git reset --hard origin/stg
 
-      - name: Resolve suite grep
-        run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
-            echo "PLAYWRIGHT_GREP=@smoke" >> $GITHUB_ENV
-          else
-            if [ "${{ github.event.inputs.suite }}" = "smoke" ]; then
-              echo "PLAYWRIGHT_GREP=@smoke" >> $GITHUB_ENV
-            elif [ "${{ github.event.inputs.suite }}" = "regression" ]; then
-              echo "PLAYWRIGHT_GREP=@regression" >> $GITHUB_ENV
-            elif [ "${{ github.event.inputs.suite }}" = "guest" ]; then
-              echo "PLAYWRIGHT_GREP=@guest" >> $GITHUB_ENV
-            elif [ "${{ github.event.inputs.suite }}" = "user" ]; then
-              echo "PLAYWRIGHT_GREP=@user" >> $GITHUB_ENV
-            elif [ "${{ github.event.inputs.suite }}" = "admin" ]; then
-              echo "PLAYWRIGHT_GREP=@admin" >> $GITHUB_ENV
-            else
-              echo "PLAYWRIGHT_GREP=" >> $GITHUB_ENV
-            fi
-          fi
+            echo "==> Set app version"
+            export NEXT_PUBLIC_APP_VERSION=$(git rev-parse --short HEAD)
 
-      - name: Wait for target environment
-        run: |
-          for i in {1..30}; do
-            if curl -fsS "$PLAYWRIGHT_BASE_URL/login" > /dev/null; then
-              echo "Target environment is ready"
-              exit 0
-            fi
-            echo "Waiting for $PLAYWRIGHT_BASE_URL ..."
-            sleep 10
-          done
-          echo "Target environment did not become ready in time"
-          exit 1
+            echo "==> Install dependencies"
+            npm ci
 
-      - name: Install dependencies
-        run: npm ci
+            echo "==> Build app"
+            npm run build:versioned
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+            echo "==> Restart PM2"
+            pm2 restart ${{ secrets.STG_PM2_APP_NAME }} --update-env
 
-      - name: Run Playwright tests
-        run: |
-          if [ -n "$PLAYWRIGHT_GREP" ]; then
-            npx playwright test --grep "$PLAYWRIGHT_GREP"
-          else
-            npx playwright test
-          fi
-        env:
-          PLAYWRIGHT_ADMIN_EMAIL: ${{ secrets.PLAYWRIGHT_ADMIN_EMAIL }}
-          PLAYWRIGHT_ADMIN_PASSWORD: ${{ secrets.PLAYWRIGHT_ADMIN_PASSWORD }}
-          PLAYWRIGHT_USER_EMAIL: ${{ secrets.PLAYWRIGHT_USER_EMAIL }}
-          PLAYWRIGHT_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_USER_PASSWORD }}
-          PLAYWRIGHT_SUPABASE_URL: ${{ env.PLAYWRIGHT_SUPABASE_URL }}
-          PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY: ${{ env.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY }}
-          PLAYWRIGHT_BASE_URL: ${{ env.PLAYWRIGHT_BASE_URL }}
+            echo "==> Verify PM2 process"
+            pm2 describe ${{ secrets.STG_PM2_APP_NAME }}
 
-      - name: Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report
-          retention-days: 7
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-test-results
-          path: test-results
-          retention-days: 7
+            echo "==> Deployed version:"
+            git rev-parse --short HEAD
