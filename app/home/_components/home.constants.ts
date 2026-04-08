@@ -8,20 +8,16 @@ export const ADDRESS_QUERY = "Strada Borhanciului 84A, Cluj-Napoca, Romania";
 
 export const SERVICES = [
   {
-    title: "Reparații hardware",
-    desc: "Rezolvăm rapid probleme cu laptopuri și PC-uri.",
+    title: "Reparații laptop & PC",
+    desc: "Diagnostic rapid și reparații hardware/software. Fără pierdere de timp.",
   },
   {
-    title: "Consultanță software",
-    desc: "Instalări, update-uri și suport software.",
+    title: "Instalare Windows & optimizare",
+    desc: "Laptop lent? Îl facem rapid + instalare curată Windows și drivere.",
   },
   {
-    title: "Probleme rețea / Wi-Fi",
-    desc: "Configurări, optimizări și depanare.",
-  },
-  {
-    title: "Servicii personalizate",
-    desc: "Soluții adaptate nevoilor tale IT.",
+    title: "Probleme internet / Wi-Fi",
+    desc: "Internet slab sau pică? Configurăm și rezolvăm rapid.",
   },
 ];
 

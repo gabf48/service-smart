@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/app/context/useAuth";
+// import { useAuth } from "@/app/context/useAuth";
 import { PhoneBadge } from "./header/PhoneBadge";
 import { DesktopNav } from "./header/DesktopNav";
 import { MobileMenuButton } from "./header/MobileMenuButton";
 import { MobileNav } from "./header/MobileNav";
 
 export default function Header() {
-  const { user, role, logout } = useAuth();
+  // const { user, role, logout } = useAuth();
   const pathname = usePathname();
 
   const [scrolled, setScrolled] = useState(false);
@@ -59,9 +59,9 @@ export default function Header() {
 
           <DesktopNav
             pathname={pathname}
-            user={user}
-            role={role}
-            logout={logout}
+            // user={user}
+            // role={role}
+            // logout={logout}
           />
 
           <MobileMenuButton
@@ -74,9 +74,9 @@ export default function Header() {
       {mobileOpen && (
         <MobileNav
           pathname={pathname}
-          user={user}
-          role={role}
-          logout={logout}
+          // user={user}
+          // role={role}
+          // logout={logout}
           onClose={() => setMobileOpen(false)}
         />
       )}
