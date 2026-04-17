@@ -24,7 +24,7 @@ export function HomeHero() {
 
         <div className="flex flex-col justify-center gap-4 sm:flex-row">
           <a
-            href="tel:+40746263481"
+            href="tel:+40757180250"
             className="rounded-xl bg-blue-600 px-8 py-3 font-semibold shadow-xl transition hover:bg-blue-700"
           >
             📞 Sună acum

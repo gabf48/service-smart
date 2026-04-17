@@ -56,14 +56,14 @@ export default function ServiciiPage() {
         {/* CTA */}
         <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:justify-center">
           <a
-            href="tel:+40746263481"
+            href="tel:+40757180250"
             className="rounded-xl bg-blue-600 px-6 py-3 font-semibold hover:bg-blue-700"
           >
             📞 Sună acum
           </a>
 
           <a
-            href="https://wa.me/40746263481"
+            href="https://wa.me/40757180250"
             target="_blank"
             className="rounded-xl bg-green-600 px-6 py-3 font-semibold hover:bg-green-700"
           >

@@ -1,7 +1,7 @@
 "use client";
 
-const PHONE_DISPLAY = "+40 746 263 481";
-const PHONE_TEL = "+40746263481";
+const PHONE_DISPLAY = "+40 757 180 250";
+const PHONE_TEL = "+40757180250";
 
 export function PhoneBadge() {
   return (
