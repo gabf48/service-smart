@@ -1,8 +1,8 @@
 "use client";
 
 type Props = {
-  phoneDisplay: string; // "+40 746 263 481"
-  phoneTel: string;     // "+40746263481"
+  phoneDisplay: string; // "+40 757 180 250"
+  phoneTel: string;     // "+40757180250"
 };
 
 export default function PhoneBadge({

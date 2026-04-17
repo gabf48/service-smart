@@ -1,6 +1,6 @@
-export const PHONE_DISPLAY = "+40 746 263 481";
-export const PHONE_TEL = "+40746263481";
-export const WHATSAPP_WA = "40746263481";
+export const PHONE_DISPLAY = "+40 757 180 250";
+export const PHONE_TEL = "+40757180250";
+export const WHATSAPP_WA = "40757180250";
 export const EMAIL = "contact@service-smart.ro";
 
 export const ADDRESS_LABEL = "Str. Borhanciului 84A, Cluj-Napoca, România";
