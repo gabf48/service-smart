@@ -1,67 +1,65 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import { FooterExpanded } from "./footer/FooterExpanded";
-import { FooterCollapsedBar } from "./footer/FooterCollapsedBar";
-import { VersionHistoryModal } from "./footer/VersionHistoryModal";
-import { getSortedVersions } from "./footer/footerUtils";
-
 export default function Footer() {
-  const pathname = usePathname();
-  const [expanded, setExpanded] = useState(false);
-  const [historyOpen, setHistoryOpen] = useState(false);
-  const expandedRef = useRef<HTMLDivElement | null>(null);
-
-  const sortedVersions = useMemo(() => getSortedVersions(), []);
-  const latestVersion = sortedVersions[0]?.version || "0.0.0";
-
-  const hideFooter =
-    pathname?.startsWith("/dashboard/admin/reviews") ||
-    pathname?.startsWith("/reviews");
-
-  useEffect(() => {
-    const onDown = (e: Event) => {
-      if (!expanded || !expandedRef.current) return;
-      if (!expandedRef.current.contains(e.target as Node)) setExpanded(false);
-    };
-
-    window.addEventListener("mousedown", onDown);
-    window.addEventListener("touchstart", onDown, { passive: true });
-
-    return () => {
-      window.removeEventListener("mousedown", onDown);
-      window.removeEventListener("touchstart", onDown);
-    };
-  }, [expanded]);
-
-  if (hideFooter) {
-    return null;
-  }
-
   return (
-    <>
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 text-white">
-        <FooterExpanded
-          expanded={expanded}
-          expandedRef={expandedRef}
-          latestVersion={latestVersion}
-          onOpenHistory={() => setHistoryOpen(true)}
-        />
+    <footer className="bg-black border-t border-white/10 text-white mt-16">
+      <div className="mx-auto max-w-6xl px-4 py-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 text-sm">
+        
+        {/* Brand */}
+        <div>
+          <h3 className="text-lg font-semibold mb-3">Service Smart</h3>
+          <p className="text-white/70">
+            Reparații laptop & PC în Cluj. Rapid, corect și fără complicații.
+          </p>
+        </div>
 
-        <FooterCollapsedBar
-          expanded={expanded}
-          latestVersion={latestVersion}
-          onToggle={() => setExpanded((v) => !v)}
-          onHoverOpen={() => setExpanded(true)}
-        />
+        {/* Contact */}
+        <div>
+          <h4 className="font-semibold mb-3">Contact</h4>
+          <ul className="space-y-2 text-white/80">
+            <li>
+              📞 <a href="tel:+40757180250">+40 757 180 250</a>
+            </li>
+            <li>
+              💬 <a href="https://wa.me/40757180250">WhatsApp</a>
+            </li>
+            <li>
+              ✉️ <a href="mailto:contact@service-smart.ro">contact@service-smart.ro</a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Social */}
+        <div>
+          <h4 className="font-semibold mb-3">Social</h4>
+          <ul className="space-y-2 text-white/80">
+            <li>
+              📘 <a href="#" target="_blank">Facebook</a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Sitemap */}
+        <div>
+          <h4 className="font-semibold mb-3">Site</h4>
+          <ul className="space-y-2 text-white/80">
+            <li>
+              <a href="/home">Acasă</a>
+            </li>
+            <li>
+              <a href="/servicii">Servicii</a>
+            </li>
+            <li>
+              <a href="/contact">Contact</a>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <VersionHistoryModal
-        open={historyOpen}
-        sortedVersions={sortedVersions}
-        onClose={() => setHistoryOpen(false)}
-      />
-    </>
+      {/* Bottom */}
+      <div className="border-t border-white/10 text-center py-4 text-xs text-white/60">
+        © {new Date().getFullYear()} Service Smart. Toate drepturile rezervate.
+      </div>
+    </footer>
   );
 }
