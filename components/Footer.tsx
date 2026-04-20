@@ -34,7 +34,7 @@ export default function Footer() {
           <h4 className="font-semibold mb-3">Social</h4>
           <ul className="space-y-2 text-white/80">
             <li>
-              📘 <a href="#" target="_blank">Facebook</a>
+              📘 <a href="https://www.facebook.com/service.smart.cluj" target="_blank" rel="noopener noreferrer">Facebook</a>
             </li>
           </ul>
         </div>
