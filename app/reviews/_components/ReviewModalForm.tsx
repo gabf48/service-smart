@@ -13,6 +13,8 @@ export function ReviewModalForm({
   setRating,
   displayName,
   setDisplayName,
+  nameError,
+  setNameError,
   comment,
   setComment,
   maxCommentChars,
@@ -29,6 +31,8 @@ export function ReviewModalForm({
   setRating: (v: number) => void;
   displayName: string;
   setDisplayName: (v: string) => void;
+  nameError?: string;
+  setNameError: (v: string) => void;
   comment: string;
   setComment: (v: string) => void;
   maxCommentChars: number;
@@ -39,7 +43,10 @@ export function ReviewModalForm({
   removePicked: (idx: number) => void;
 }) {
   return (
-    <div className="space-y-4 p-6 sm:p-7" data-testid="review-modal-form">
+    <div
+      className="space-y-4 p-6 sm:p-7"
+      data-testid="review-modal-form"
+    >
       <ReviewRatingSection
         rating={rating}
         setRating={setRating}
@@ -52,6 +59,8 @@ export function ReviewModalForm({
         displayName={displayName}
         setDisplayName={setDisplayName}
         submitting={submitting}
+        nameError={nameError}
+        setNameError={setNameError}
       />
 
       <ReviewCommentField

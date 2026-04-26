@@ -27,6 +27,13 @@ export function DesktopNav({
       >
         Contact
       </Link>
+
+      <Link
+        href="/reviews"
+        className={linkClass(isActivePath(pathname, "/reviews"))}
+      >
+        Recenzii
+      </Link>
     </nav>
   );
 }

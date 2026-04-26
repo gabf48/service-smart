@@ -65,7 +65,7 @@ export function ReviewModalFooter({
             <button
               type="button"
               onClick={onSubmit}
-              disabled={submitting || !canSubmit}
+              disabled={submitting}
               className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold hover:bg-blue-700 transition disabled:opacity-60"
               data-testid="review-submit"
             >

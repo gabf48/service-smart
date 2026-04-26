@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ReviewModalHeader } from "./ReviewModalHeader";
 import { ReviewModalForm } from "./ReviewModalForm";
 import { ReviewModalFooter } from "./ReviewModalFooter";
@@ -33,15 +34,26 @@ export function ReviewModal({
   uploadPct = 0,
   maxCommentChars = 1000,
 }: ReviewModalProps) {
-  const effectiveName = isLogged
-  ? computedLockedName || "Utilizator"
-  : displayName;
+  const [nameError, setNameError] = useState("");
 
-const canSubmit =
+  const effectiveName = isLogged
+    ? computedLockedName || "Utilizator"
+    : displayName;
+
+  const canSubmit =
   !!comment.trim() &&
-  !!effectiveName.trim() &&
   rating >= 1 &&
   rating <= 5;
+
+  const handleSubmit = () => {
+    if (!isLogged && !displayName.trim()) {
+      setNameError("Numele este obligatoriu.");
+      return;
+    }
+
+    setNameError("");
+    onSubmit();
+  };
 
   return (
     <ReviewModalShell open={open} onClose={onClose}>
@@ -52,30 +64,32 @@ const canSubmit =
           onDismissNotice={onDismissNotice}
         />
 
-        <ReviewModalForm
-          submitting={submitting}
-          isLogged={isLogged}
-          computedLockedName={computedLockedName}
-          rating={rating}
-          setRating={setRating}
-          displayName={displayName}
-          setDisplayName={setDisplayName}
-          comment={comment}
-          setComment={setComment}
-          maxCommentChars={maxCommentChars}
-          MAX_FILES={MAX_FILES}
-          pickedFiles={pickedFiles}
-          previews={previews}
-          onPickFiles={onPickFiles}
-          removePicked={removePicked}
-        />
+       <ReviewModalForm
+  submitting={submitting}
+  isLogged={isLogged}
+  computedLockedName={computedLockedName}
+  rating={rating}
+  setRating={setRating}
+  displayName={displayName}
+  setDisplayName={setDisplayName}
+  nameError={nameError}
+  setNameError={setNameError}
+  comment={comment}
+  setComment={setComment}
+  maxCommentChars={maxCommentChars}
+  MAX_FILES={MAX_FILES}
+  pickedFiles={pickedFiles}
+  previews={previews}
+  onPickFiles={onPickFiles}
+  removePicked={removePicked}
+/>
 
         <ReviewModalFooter
           submitting={submitting}
           uploadPct={uploadPct}
           canSubmit={canSubmit}
           onClose={onClose}
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit}
         />
       </div>
     </ReviewModalShell>
