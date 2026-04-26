@@ -48,7 +48,7 @@ export function useReviewsPage({
 
       setPageNotice({
         type: "success",
-        text: "Mulțumim! Review-ul a fost trimis și va apărea după aprobarea adminului.",
+        text: "Mulțumim! Review-ul a fost publicat cu succes.",
       });
     } catch (e: any) {
       setModalNotice({

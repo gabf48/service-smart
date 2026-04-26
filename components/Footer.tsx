@@ -52,6 +52,9 @@ export default function Footer() {
             <li>
               <a href="/contact">Contact</a>
             </li>
+            <li>
+              <a href="/reviews">Recenzii</a>
+            </li>
           </ul>
         </div>
       </div>

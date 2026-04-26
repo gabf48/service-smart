@@ -37,9 +37,6 @@ export function ReviewsHero({
             >
               Reviews
             </h1>
-            <p className="mt-4 text-base text-white/80 sm:text-lg">
-              Review-urile apar public după aprobarea adminului.
-            </p>
           </div>
 
           <ReviewsHeroSummary avg={avg} count={count} onOpen={onOpen} />
