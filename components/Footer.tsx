@@ -18,13 +18,19 @@ export default function Footer() {
           <h4 className="font-semibold mb-3">Contact</h4>
           <ul className="space-y-2 text-white/80">
             <li>
-              📞 <a href="tel:+40757180250">+40 757 180 250</a>
+              📞 <a href="tel:+40757180250" className="hover:text-white transition">
+                +40 757 180 250
+              </a>
             </li>
             <li>
-              💬 <a href="https://wa.me/40757180250">WhatsApp</a>
+              💬 <a href="https://wa.me/40757180250" target="_blank" className="hover:text-white transition">
+                WhatsApp
+              </a>
             </li>
             <li>
-              ✉️ <a href="mailto:contact@service-smart.ro">contact@service-smart.ro</a>
+              ✉️ <a href="mailto:contact@service-smart.ro" className="hover:text-white transition">
+                contact@service-smart.ro
+              </a>
             </li>
           </ul>
         </div>
@@ -34,7 +40,24 @@ export default function Footer() {
           <h4 className="font-semibold mb-3">Social</h4>
           <ul className="space-y-2 text-white/80">
             <li>
-              📘 <a href="https://www.facebook.com/service.smart.cluj" target="_blank" rel="noopener noreferrer">Facebook</a>
+              📘 <a href="https://www.facebook.com/service.smart.cluj" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+                Facebook
+              </a>
+            </li>
+            <li>
+              🎵 <a href="https://www.tiktok.com/@service_smart_cluj" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+                TikTok
+              </a>
+            </li>
+            <li>
+              📸 <a href="https://www.instagram.com/gabriel.service.it/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+                Instagram
+              </a>
+            </li>
+            <li>
+              💬 <a href="https://discord.gg/sphNsGvDg" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+                Discord
+              </a>
             </li>
           </ul>
         </div>
@@ -44,16 +67,16 @@ export default function Footer() {
           <h4 className="font-semibold mb-3">Site</h4>
           <ul className="space-y-2 text-white/80">
             <li>
-              <a href="/home">Acasă</a>
+              <a href="/home" className="hover:text-white transition">Acasă</a>
             </li>
             <li>
-              <a href="/servicii">Servicii</a>
+              <a href="/servicii" className="hover:text-white transition">Servicii</a>
             </li>
             <li>
-              <a href="/contact">Contact</a>
+              <a href="/contact" className="hover:text-white transition">Contact</a>
             </li>
             <li>
-              <a href="/reviews">Recenzii</a>
+              <a href="/reviews" className="hover:text-white transition">Recenzii</a>
             </li>
           </ul>
         </div>
