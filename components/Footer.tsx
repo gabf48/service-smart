@@ -78,6 +78,9 @@ export default function Footer() {
             <li>
               <a href="/reviews" className="hover:text-white transition">Recenzii</a>
             </li>
+            <li>
+              <a href="/reviews">Recenzii</a>
+            </li>
           </ul>
         </div>
       </div>
