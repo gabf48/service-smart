@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   },
   description: "Reparații laptop și PC în Cluj-Napoca. Rapid, corect și fără complicații.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/logo1.png",
   },
 };
 
