@@ -51,18 +51,18 @@ export default function Header() {
           scrolled ? "py-3" : "py-5",
         ].join(" ")}
       >
-        <h1 className="shrink-0 flex items-center">
-          <Link href="/home" className="flex items-center">
-            <Image
-              src="/logo2.png"
-              alt="Service Smart"
-              width={160}
-              height={40}
-              className="h-9 w-auto object-contain transition-all duration-300"
-              priority
-            />
-          </Link>
-        </h1>
+       <h1 className="shrink-0 flex items-center">
+  <Link href="/home" className="flex items-center gap-3">
+  <Image
+    src="/logo2.png"
+    alt="Service Smart"
+    width={420}
+    height={120}
+    className="h-20 md:h-24 w-auto object-contain transition-all duration-300"
+    priority
+  />
+</Link>
+</h1>
 
         <div className="ml-auto flex min-w-0 items-center gap-3">
           <PhoneBadge />
