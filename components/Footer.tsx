@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-black border-t border-white/10 text-white mt-16">
@@ -23,7 +25,7 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              💬 <a href="https://wa.me/40757180250" target="_blank" className="hover:text-white transition">
+              💬 <a href="https://wa.me/40757180250" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
                 WhatsApp
               </a>
             </li>
@@ -67,19 +69,16 @@ export default function Footer() {
           <h4 className="font-semibold mb-3">Site</h4>
           <ul className="space-y-2 text-white/80">
             <li>
-              <a href="/home" className="hover:text-white transition">Acasă</a>
+              <Link href="/home" className="hover:text-white transition">Acasă</Link>
             </li>
             <li>
-              <a href="/servicii" className="hover:text-white transition">Servicii</a>
+              <Link href="/servicii" className="hover:text-white transition">Servicii</Link>
             </li>
             <li>
-              <a href="/contact" className="hover:text-white transition">Contact</a>
+              <Link href="/contact" className="hover:text-white transition">Contact</Link>
             </li>
             <li>
-              <a href="/reviews" className="hover:text-white transition">Recenzii</a>
-            </li>
-            <li>
-              <a href="/reviews">Recenzii</a>
+              <Link href="/reviews" className="hover:text-white transition">Recenzii</Link>
             </li>
           </ul>
         </div>
