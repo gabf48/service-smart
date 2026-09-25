@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 // import { useAuth } from "@/app/context/useAuth";
@@ -50,8 +51,17 @@ export default function Header() {
           scrolled ? "py-3" : "py-5",
         ].join(" ")}
       >
-        <h1 className={["shrink-0 font-bold tracking-wide", scrolled ? "text-base" : "text-lg"].join(" ")}>
-          <Link href="/home">Service Smart</Link>
+        <h1 className="shrink-0 flex items-center">
+          <Link href="/home" className="flex items-center">
+            <Image
+              src="/logo2.png"
+              alt="Service Smart"
+              width={160}
+              height={40}
+              className="h-9 w-auto object-contain transition-all duration-300"
+              priority
+            />
+          </Link>
         </h1>
 
         <div className="ml-auto flex min-w-0 items-center gap-3">
