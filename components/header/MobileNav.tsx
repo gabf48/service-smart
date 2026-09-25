@@ -38,6 +38,13 @@ export function MobileNav({
             >
               Contact
             </Link>
+            <Link
+  href="/reviews"
+  className={mobileItemClass(isActivePath(pathname, "/reviews"))}
+  onClick={onClose}
+>
+  Reviews
+</Link>
           </div>
         </div>
       </div>
