@@ -13,6 +13,9 @@ const Map = dynamic(() => import("../../../components/HomeMap"), {
 });
 
 export function HomeLocation() {
+  // Temporar ascuns pe durata mutării sediului
+  return null;
+
   return (
     <section className="bg-gray-900 px-4 py-24">
       <h2 className="mb-6 text-center text-3xl font-bold">Unde mă găsești?</h2>
