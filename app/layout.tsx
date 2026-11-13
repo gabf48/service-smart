@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo1.png",
   },
+  // Aici adaugi eticheta custom pentru Profitshare
+  other: {
+    profitshareid: "27b26e6a279d37946a63ab65de8bf485",
+  },
 };
 
 export default function RootLayout({
@@ -24,9 +28,8 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <head>
-        <meta name="profitshareid" content="27b26e6a279d37946a63ab65de8bf485" />
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
+          src="https://www.googletagmanager.com/gtag/js?id=G-65W4QTQDY7"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
