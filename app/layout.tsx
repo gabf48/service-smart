@@ -24,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <head>
+        <meta name="profitshareid" content="27b26e6a279d37946a63ab65de8bf485" />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
           strategy="afterInteractive"
@@ -37,7 +38,6 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-
       <body className="space-bg min-h-screen flex flex-col">
         <AuthProvider>
           <LayoutShell>{children}</LayoutShell>
