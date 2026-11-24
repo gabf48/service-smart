@@ -4,15 +4,40 @@ on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: "Type PROMOTE to continue"
+        description: "Type PROMOTE to confirm promotion to production"
         required: true
         type: string
+      test_scope:
+        description: "Which tests to run before promoting"
+        required: true
+        default: "smoke"
+        type: choice
+        options:
+          - smoke
+          - all
+      smoke_env:
+        description: "Environment to run smoke tests against"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+      run_migrations:
+        description: "Apply Supabase migrations to production"
+        required: true
+        default: "true"
+        type: boolean
+
+permissions:
+  contents: write
 
 jobs:
-  smoke:
+  test:
+    name: Run Tests (${{ github.event.inputs.test_scope }})
     if: ${{ github.event.inputs.confirm == 'PROMOTE' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Checkout staging
@@ -26,31 +51,45 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Set staging base URL
-        run: echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_STAGING }}" >> $GITHUB_ENV
-
       - name: Install dependencies
         run: npm ci
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run smoke suite on staging
-        run: npx playwright test --grep "@smoke"
+      - name: Set base URL for ${{ github.event.inputs.smoke_env }}
+        run: |
+          if [ "${{ github.event.inputs.smoke_env }}" = "staging" ]; then
+            echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_STAGING }}" >> $GITHUB_ENV
+            echo "PLAYWRIGHT_SUPABASE_URL=${{ secrets.PLAYWRIGHT_SUPABASE_URL_STAGING }}" >> $GITHUB_ENV
+            echo "PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY=${{ secrets.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY_STAGING }}" >> $GITHUB_ENV
+          else
+            echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL_PRODUCTION }}" >> $GITHUB_ENV
+            echo "PLAYWRIGHT_SUPABASE_URL=${{ secrets.PLAYWRIGHT_SUPABASE_URL_PRODUCTION }}" >> $GITHUB_ENV
+            echo "PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY=${{ secrets.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY_PRODUCTION }}" >> $GITHUB_ENV
+          fi
+
+      - name: Run tests
+        run: |
+          if [ "${{ github.event.inputs.test_scope }}" = "all" ]; then
+            npx playwright test
+          else
+            npx playwright test --grep "@smoke"
+          fi
         env:
           PLAYWRIGHT_ADMIN_EMAIL: ${{ secrets.PLAYWRIGHT_ADMIN_EMAIL }}
           PLAYWRIGHT_ADMIN_PASSWORD: ${{ secrets.PLAYWRIGHT_ADMIN_PASSWORD }}
           PLAYWRIGHT_USER_EMAIL: ${{ secrets.PLAYWRIGHT_USER_EMAIL }}
           PLAYWRIGHT_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_USER_PASSWORD }}
-          PLAYWRIGHT_SUPABASE_URL: ${{ secrets.PLAYWRIGHT_SUPABASE_URL_STAGING }}
-          PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY_STAGING }}
+          PLAYWRIGHT_SUPABASE_URL: ${{ env.PLAYWRIGHT_SUPABASE_URL }}
+          PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY: ${{ env.PLAYWRIGHT_SUPABASE_SERVICE_ROLE_KEY }}
           PLAYWRIGHT_BASE_URL: ${{ env.PLAYWRIGHT_BASE_URL }}
 
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-smoke
+          name: playwright-report-${{ github.event.inputs.test_scope }}-${{ github.event.inputs.smoke_env }}
           path: playwright-report
           retention-days: 7
 
@@ -58,14 +97,44 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-test-results-smoke
+          name: playwright-test-results-${{ github.event.inputs.test_scope }}-${{ github.event.inputs.smoke_env }}
           path: test-results
           retention-days: 7
 
-  promote:
-    needs: smoke
-    if: ${{ github.event.inputs.confirm == 'PROMOTE' && needs.smoke.result == 'success' }}
+  migrate:
+    name: Apply Supabase Migrations to Production
+    needs: test
+    if: ${{ github.event.inputs.confirm == 'PROMOTE' && needs.test.result == 'success' && github.event.inputs.run_migrations == 'true' }}
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout staging
+        uses: actions/checkout@v4
+        with:
+          ref: stg
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Apply migrations to production
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL_PRODUCTION }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          echo "Applying migrations to production database..."
+          supabase db push --include-all --dry-run
+          supabase db push --include-all
+        working-directory: ./supabase
+
+  promote:
+    name: Promote Staging to Main (Production Deploy)
+    needs: [test, migrate]
+    if: ${{ github.event.inputs.confirm == 'PROMOTE' && needs.test.result == 'success' && (needs.migrate.result == 'success' || needs.migrate.result == 'skipped') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     permissions:
       contents: write
 
@@ -86,3 +155,11 @@ jobs:
           git fetch origin
           git checkout -B main origin/stg
           git push origin main --force
+
+      - name: Summary
+        run: |
+          echo "✅ Promotion complete!"
+          echo "📋 Test scope: ${{ github.event.inputs.test_scope }}"
+          echo "🌍 Smoke environment: ${{ github.event.inputs.smoke_env }}"
+          echo "🗄️ Migrations applied: ${{ github.event.inputs.run_migrations }}"
+          echo "🚀 Production deployed from commit: $(git rev-parse --short HEAD)"
