@@ -52,11 +52,14 @@ jobs:
             echo "==> Install dependencies"
             npm ci
 
+            echo "==> Stop PM2 before build (releases .next/lock)"
+            pm2 stop ${{ secrets.STG_PM2_APP_NAME }} || true
+
             echo "==> Build app"
             npm run build:versioned
 
-            echo "==> Restart PM2"
-            pm2 restart ${{ secrets.STG_PM2_APP_NAME }} --update-env
+            echo "==> Start PM2 with updated env"
+            pm2 start ${{ secrets.STG_PM2_APP_NAME }} --update-env
 
             echo "==> Verify PM2 process"
             pm2 describe ${{ secrets.STG_PM2_APP_NAME }}

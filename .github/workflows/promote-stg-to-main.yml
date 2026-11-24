@@ -11,7 +11,7 @@ on:
 jobs:
   smoke:
     if: ${{ github.event.inputs.confirm == 'PROMOTE' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
 
     steps:
@@ -65,7 +65,7 @@ jobs:
   promote:
     needs: smoke
     if: ${{ github.event.inputs.confirm == 'PROMOTE' && needs.smoke.result == 'success' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
 
