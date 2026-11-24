@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@/app/context/useAuth";
+
 export default function DashboardSidebar() {
   const { role } = useAuth();
 
@@ -13,13 +14,16 @@ export default function DashboardSidebar() {
             History
           </Link>
           <Link href="/settings/security" className="hover:bg-gray-700 px-2 py-1 rounded">
-  Security
-</Link>
+            Security
+          </Link>
         </>
       )}
 
       {role === "admin" && (
         <>
+          <Link href="/service" className="hover:bg-gray-700 px-2 py-1 rounded">
+            Service
+          </Link>
           <Link href="/dashboard/admin/posts" className="hover:bg-gray-700 px-2 py-1 rounded">
             Posts
           </Link>
@@ -30,8 +34,8 @@ export default function DashboardSidebar() {
             Reviews
           </Link>
           <Link href="/settings/security" className="hover:bg-gray-700 px-2 py-1 rounded">
-  Security
-</Link>
+            Security
+          </Link>
         </>
       )}
     </aside>

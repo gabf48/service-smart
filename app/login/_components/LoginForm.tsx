@@ -89,17 +89,13 @@ const submitDisabled = loading;
       />
 
    <button
-  type="button"
-  onClick={(e) => {
-    console.log("CLICK LOGIN");
-    onSubmit(e as any);
-  }}
-        disabled={submitDisabled}
-        className="mt-4 w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white disabled:opacity-60"
-        data-testid="login-submit"
-      >
-        {loading ? "Se încarcă..." : "Loghează-te"}
-      </button>
+  type="submit"
+  disabled={submitDisabled}
+  className="mt-4 w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white disabled:opacity-60"
+  data-testid="login-submit"
+>
+  {loading ? "Se încarcă..." : "Loghează-te"}
+</button>
     </form>
   );
 }

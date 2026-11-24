@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { mobileItemClass, isActivePath } from "./headerUtils";
+import { useAuth } from "@/app/context/AuthContext";
 
 export function MobileNav({
   pathname,
@@ -10,6 +11,9 @@ export function MobileNav({
   pathname: string | null;
   onClose: () => void;
 }) {
+  const { role } = useAuth();
+  const isAdmin = role === "admin";
+
   return (
     <div className="border-t border-white/10 bg-black/75 backdrop-blur-xl lg:hidden">
       <div className="mx-auto max-w-6xl px-4 py-4">
@@ -38,13 +42,24 @@ export function MobileNav({
             >
               Contact
             </Link>
+
             <Link
-  href="/reviews"
-  className={mobileItemClass(isActivePath(pathname, "/reviews"))}
-  onClick={onClose}
->
-  Reviews
-</Link>
+              href="/reviews"
+              className={mobileItemClass(isActivePath(pathname, "/reviews"))}
+              onClick={onClose}
+            >
+              Reviews
+            </Link>
+
+            {isAdmin && (
+              <Link
+                href="/service"
+                className={mobileItemClass(isActivePath(pathname, "/service"))}
+                onClick={onClose}
+              >
+                Service
+              </Link>
+            )}
           </div>
         </div>
       </div>

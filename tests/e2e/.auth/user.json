@@ -1,14 +1,45 @@
 {
-  "cookies": [],
-  "origins": [
+  "cookies": [
     {
-      "origin": "http://127.0.0.1:3000",
-      "localStorage": [
-        {
-          "name": "sb-mccnpqfxzxbshsozebzu-auth-token",
-          "value": "{\"access_token\":\"eyJhbGciOiJFUzI1NiIsImtpZCI6IjhiN2NjMGQwLWIyZDUtNDljZi04ZDdiLTkzMDVlYjkyYmRjMCIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL21jY25wcWZ4enhic2hzb3plYnp1LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI5NmRiZDMxZS00NDhmLTQ1YjQtODhiNy01M2QzY2FiNjUyOGIiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzc1MTQ3OTExLCJpYXQiOjE3NzUxNDQzMTEsImVtYWlsIjoiYW51bnR1cmkudXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsIjoiYW51bnR1cmkudXNlckBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGhvbmVfdmVyaWZpZWQiOmZhbHNlLCJzdWIiOiI5NmRiZDMxZS00NDhmLTQ1YjQtODhiNy01M2QzY2FiNjUyOGIifSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc3NTE0NDMxMX1dLCJzZXNzaW9uX2lkIjoiNmM0MmJlYzQtZmM1OC00NDkxLWE5NDYtMGViYzI5ZTQ5ZTliIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.NmRJu6g_rEFi7b_gvyEhVA1wYx0iv18hxCmEMbcPQEBLxdI_ES2u0yJz7fmfflyg2IF8Zyo_HsoVbIG5_jt9Ug\",\"token_type\":\"bearer\",\"expires_in\":3600,\"expires_at\":1775147911,\"refresh_token\":\"ozyircr7cdvm\",\"user\":{\"id\":\"96dbd31e-448f-45b4-88b7-53d3cab6528b\",\"aud\":\"authenticated\",\"role\":\"authenticated\",\"email\":\"anunturi.user@gmail.com\",\"email_confirmed_at\":\"2026-02-27T03:49:05.066278Z\",\"phone\":\"\",\"confirmed_at\":\"2026-02-27T03:49:05.066278Z\",\"last_sign_in_at\":\"2026-04-02T15:38:31.650083138Z\",\"app_metadata\":{\"provider\":\"email\",\"providers\":[\"email\"]},\"user_metadata\":{\"email\":\"anunturi.user@gmail.com\",\"email_verified\":true,\"phone_verified\":false,\"sub\":\"96dbd31e-448f-45b4-88b7-53d3cab6528b\"},\"factors\":[{\"id\":\"92845317-7d82-4902-99a3-c557d2e04159\",\"created_at\":\"2026-03-29T18:21:14.857971Z\",\"updated_at\":\"2026-03-29T18:21:19.219758Z\",\"status\":\"unverified\",\"factor_type\":\"totp\",\"phone\":\"\",\"last_challenged_at\":\"2026-03-29T18:21:19.218241Z\"}],\"identities\":[{\"identity_id\":\"e05e1ae3-a929-474a-be3a-7b6d2731f415\",\"id\":\"96dbd31e-448f-45b4-88b7-53d3cab6528b\",\"user_id\":\"96dbd31e-448f-45b4-88b7-53d3cab6528b\",\"identity_data\":{\"email\":\"anunturi.user@gmail.com\",\"email_verified\":true,\"phone_verified\":false,\"sub\":\"96dbd31e-448f-45b4-88b7-53d3cab6528b\"},\"provider\":\"email\",\"last_sign_in_at\":\"2026-02-27T03:48:13.06723Z\",\"created_at\":\"2026-02-27T03:48:13.067273Z\",\"updated_at\":\"2026-02-27T03:48:13.067273Z\",\"email\":\"anunturi.user@gmail.com\"}],\"created_at\":\"2026-02-27T03:48:13.064855Z\",\"updated_at\":\"2026-04-02T15:38:31.653823Z\",\"is_anonymous\":false},\"weak_password\":null}"
-        }
-      ]
+      "name": "_ga",
+      "value": "GA1.1.1250291452.1795541278",
+      "domain": "127.0.0.1",
+      "path": "/",
+      "expires": 1830101277.809849,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_65W4QTQDY7",
+      "value": "GS2.1.s1795541277$o1$g0$t1795541277$j60$l0$h0",
+      "domain": "127.0.0.1",
+      "path": "/",
+      "expires": 1830101277.879695,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "sb-mccnpqfxzxbshsozebzu-auth-token.0",
+      "value": "base64-eyJhY2Nlc3NfdG9rZW4iOiJleUpoYkdjaU9pSkZVekkxTmlJc0ltdHBaQ0k2SWpoaU4yTmpNR1F3TFdJeVpEVXRORGxqWmkwNFpEZGlMVGt6TURWbFlqa3lZbVJqTUNJc0luUjVjQ0k2SWtwWFZDSjkuZXlKcGMzTWlPaUpvZEhSd2N6b3ZMMjFqWTI1d2NXWjRlbmhpYzJoemIzcGxZbnAxTG5OMWNHRmlZWE5sTG1OdkwyRjFkR2d2ZGpFaUxDSnpkV0lpT2lJNU5tUmlaRE14WlMwME5EaG1MVFExWWpRdE9EaGlOeTAxTTJRelkyRmlOalV5T0dJaUxDSmhkV1FpT2lKaGRYUm9aVzUwYVdOaGRHVmtJaXdpWlhod0lqb3hOemsxTlRRME9EYzRMQ0pwWVhRaU9qRTNPVFUxTkRFeU56Z3NJbVZ0WVdsc0lqb2lZVzUxYm5SMWNta3VkWE5sY2tCbmJXRnBiQzVqYjIwaUxDSndhRzl1WlNJNklpSXNJbUZ3Y0Y5dFpYUmhaR0YwWVNJNmV5SndjbTkyYVdSbGNpSTZJbVZ0WVdsc0lpd2ljSEp2ZG1sa1pYSnpJanBiSW1WdFlXbHNJbDE5TENKMWMyVnlYMjFsZEdGa1lYUmhJanA3SW1WdFlXbHNJam9pWVc1MWJuUjFjbWt1ZFhObGNrQm5iV0ZwYkM1amIyMGlMQ0psYldGcGJGOTJaWEpwWm1sbFpDSTZkSEoxWlN3aWNHaHZibVZmZG1WeWFXWnBaV1FpT21aaGJITmxMQ0p6ZFdJaU9pSTVObVJpWkRNeFpTMDBORGhtTFRRMVlqUXRPRGhpTnkwMU0yUXpZMkZpTmpVeU9HSWlmU3dpY205c1pTSTZJbUYxZEdobGJuUnBZMkYwWldRaUxDSmhZV3dpT2lKaFlXd3hJaXdpWVcxeUlqcGJleUp0WlhSb2IyUWlPaUp3WVhOemQyOXlaQ0lzSW5ScGJXVnpkR0Z0Y0NJNk1UYzVOVFUwTVRJM09IMWRMQ0p6WlhOemFXOXVYMmxrSWpvaU5ETTNPVGRpT1RndE9HRTRNaTAwWXpoaExXRXhObUV0T0dVd05EWXhPREprTjJZMElpd2lhWE5mWVc1dmJubHRiM1Z6SWpwbVlXeHpaWDAuaXdIZFdLNjhJME43d2NxMDJKTDJZLVh6bmoyZUI5Sm03a2FjaGVnT1NyOVpENjQzQkNaeFZya3hGX1hDTFRrZ0hTZUdWX05NTURGdEEyREU4VGRjaWciLCJ0b2tlbl90eXBlIjoiYmVhcmVyIiwiZXhwaXJlc19pbiI6MzYwMCwiZXhwaXJlc19hdCI6MTc5NTU0NDg3OCwicmVmcmVzaF90b2tlbiI6ImRsdmFsb3JkZWdqNyIsInVzZXIiOnsiaWQiOiI5NmRiZDMxZS00NDhmLTQ1YjQtODhiNy01M2QzY2FiNjUyOGIiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJlbWFpbCI6ImFudW50dXJpLnVzZXJAZ21haWwuY29tIiwiZW1haWxfY29uZmlybWVkX2F0IjoiMjAyNi0wMi0yN1QwMzo0OTowNS4wNjYyNzhaIiwicGhvbmUiOiIiLCJjb25maXJtZWRfYXQiOiIyMDI2LTAyLTI3VDAzOjQ5OjA1LjA2NjI3OFoiLCJsYXN0X3NpZ25faW5fYXQiOiIyMDI2LTExLTI0VDE3OjI3OjU4LjM5MTI0NzYyMloiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6ImFudW50dXJpLnVzZXJAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiOTZkYmQzMWUtNDQ4Zi00NWI0LTg4YjctNTNkM2NhYjY1MjhiIn0sImZhY3RvcnMiOlt7ImlkIjoiOTI4NDUzMTctN2Q4Mi00OTAyLTk5YTMtYzU1N2QyZTA0MTU5IiwiY3JlYXRlZF9hdCI6IjIwMjYtMDMtMjlUMTg6MjE6MTQuODU3OTcxWiIsInVwZGF0ZWRfYXQiOiIyMDI2LTAzLTI5VDE4OjIxOjE5LjIxOTc1OFoiLCJzdGF0dXMiOiJ1bnZlcmlmaWVkIiwiZmFjdG9yX3R5cGUiOiJ0b3RwIiwicGhvbmUiOiIiLCJsYXN0X2NoYWxsZW5nZWRfYXQiOiIyMDI2LTAzLTI5VDE4OjIxOjE5LjIxODI0MVoifV0sImlkZW50aXRpZXMiOlt7ImlkZW50aXR5X2lkIjoiZTA1ZTFhZTMtYTkyOS00NzRhLWJlM2EtN2I2ZDI3MzFmNDE1IiwiaWQiOiI5NmRiZDMxZS00NDhmLTQ1YjQtODhiNy01M2QzY2FiNjUyOGIiLCJ1c2VyX2lkIjoiOTZkYmQzMWUtNDQ4Zi00NWI0LTg4YjctNTNkM2NhYjY1MjhiIiwiaWRlbnRpdHlfZGF0YSI6eyJlbWFpbCI6ImFudW50dXJpLnVzZXJAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiOTZkYmQzMWUtNDQ4Zi00NWI0LTg4YjctNTNkM2NhYjY1MjhiIn0sInByb3ZpZGVyIjoiZW1haWwiLCJsYXN0X3NpZ25faW5fYXQiOiIyMDI2LTAyLTI3VDAzOjQ4OjEzLjA2NzIzWiIsImNyZWF0ZWRfYXQiOiIyMDI2LTAyLTI3VDAzOjQ4OjEzLjA2NzI3M1oiLCJ1cGRhdGVkX2F0IjoiMjAyNi0wMi0yN1QwMzo0ODoxMy4wNjcyNzNaIiwiZW1haWwiOiJhbnVudHVyaS51c2VyQGdtYWlsLmNvbSJ9XSwiY3JlYXRlZF9hdCI6IjIwMjYtMDItMjdUMDM6NDg6MTMuMDY0ODU1WiIsInVwZGF0ZWRfYXQiOiIyMDI2LTExLTI0VDE3OjI3OjU4LjQxNTU0MVoiLCJpc19hbm9ueW1vd",
+      "domain": "127.0.0.1",
+      "path": "/",
+      "expires": 1830101278.482102,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "sb-mccnpqfxzxbshsozebzu-auth-token.1",
+      "value": "XMiOmZhbHNlfSwid2Vha19wYXNzd29yZCI6bnVsbH0",
+      "domain": "127.0.0.1",
+      "path": "/",
+      "expires": 1830101278.482246,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
     }
-  ]
+  ],
+  "origins": []
 }

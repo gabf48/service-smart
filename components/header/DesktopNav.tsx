@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { linkClass, isActivePath } from "./headerUtils";
+import { useAuth } from "@/app/context/AuthContext";
 
 export function DesktopNav({
   pathname,
 }: {
   pathname: string | null;
 }) {
+  const { role } = useAuth();
+  const isAdmin = role === "admin";
+
   return (
     <nav className="hidden items-center gap-2 lg:flex">
       <Link href="/home" className={linkClass(isActivePath(pathname, "/home"))}>
@@ -34,6 +38,15 @@ export function DesktopNav({
       >
         Recenzii
       </Link>
+
+      {isAdmin && (
+        <Link
+          href="/service"
+          className={linkClass(isActivePath(pathname, "/service"))}
+        >
+          Service
+        </Link>
+      )}
     </nav>
   );
 }
