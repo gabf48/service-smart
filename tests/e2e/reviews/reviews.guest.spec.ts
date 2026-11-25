@@ -25,7 +25,7 @@ test.afterAll(async () => {
   await cleanupPlaywrightReviews("PW");
 });
 
-  test("@smoke @guest guest sees validation for empty review", async ({ page }) => {
+  test("@regression @guest guest sees validation for empty review", async ({ page }) => {
     await page.goto("/reviews");
 
     await page.getByTestId("reviews-open-modal").click();

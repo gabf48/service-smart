@@ -36,7 +36,7 @@ test.afterAll(async () => {
     await pendingTab.click();
   });
 
-  test("@smoke @admin admin can approve newly created review", async ({ browser, page }) => {
+  test("@regression @admin admin can approve newly created review", async ({ browser, page }) => {
     const guestContext = await browser.newContext();
     const guestPage = await guestContext.newPage();
 
@@ -72,7 +72,7 @@ test.afterAll(async () => {
     await expect(approvedCard).toBeVisible();
   });
 
-  test("@smoke @admin admin can reject newly created review", async ({ browser, page }) => {
+  test("@regression @admin admin can reject newly created review", async ({ browser, page }) => {
     const guestContext = await browser.newContext();
     const guestPage = await guestContext.newPage();
 
