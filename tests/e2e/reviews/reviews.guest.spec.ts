@@ -8,7 +8,7 @@ function uniqueText(prefix: string) {
 }
 
 test.describe("Guest reviews", () => {
-  test("@smoke @guest guest can open review modal", async ({ page }) => {
+  test("@regression @guest guest can open review modal", async ({ page }) => {
     await page.goto("/reviews");
 
     await page.getByTestId("reviews-open-modal").click();

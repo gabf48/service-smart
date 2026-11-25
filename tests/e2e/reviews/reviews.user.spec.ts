@@ -56,7 +56,7 @@ test.describe("Logged user reviews", () => {
     await expect(page.getByTestId("review-rating-value")).toContainText("4/5");
   });
 
-  test("@smoke @user logged user can submit review", async ({ page }) => {
+  test("@regression @user logged user can submit review", async ({ page }) => {
     const comment = uniqueText("PW logged user review");
 
     await page.goto("/reviews");

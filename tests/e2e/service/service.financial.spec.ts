@@ -41,7 +41,7 @@ test.describe("Service - Financial Transactions", () => {
     await expect(page.getByTestId("service-financial-tab")).toBeVisible();
   });
 
-  test("@smoke @service admin can add income transaction", async ({ page }) => {
+  test("@regression @service admin can add income transaction", async ({ page }) => {
     await page.getByTestId("service-financial-add-toggle").click();
 
     // Select type: Încasare
